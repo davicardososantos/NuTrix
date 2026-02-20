@@ -3,7 +3,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: laravel_app
+    container_name: nutrix_app
     restart: unless-stopped
     working_dir: /var/www
     environment:
@@ -22,10 +22,10 @@ services:
 
   nginx:
     image: nginx:alpine
-    container_name: laravel_nginx
+    container_name: nutrix_nginx
     restart: unless-stopped
     ports:
-      - "80:80"
+      - "8083:80"
     volumes:
       - ./src:/var/www:ro
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
@@ -36,7 +36,7 @@ services:
 
   mysql:
     image: mysql:8.0
-    container_name: laravel_mysql
+    container_name: nutrix_mysql
     restart: unless-stopped
     environment:
       MYSQL_DATABASE: laravel
