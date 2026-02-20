@@ -22,4 +22,4 @@ jobs:
 
       - name: Subir arquivos para o servidor
         run: |
-            rsync -avz ./site/ root@${{ secrets.HOSTINGER_IP }}:/root/nutrix/
+            rsync -avz ./ root@${{ secrets.HOSTINGER_IP }}:/root/nutrix/
