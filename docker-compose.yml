@@ -54,9 +54,10 @@ services:
     restart: unless-stopped
     environment:
       PMA_HOST: mysql
-      PMA_USER: ${DB_USERNAME}
-      PMA_PASSWORD: ${DB_PASSWORD}
-      PMA_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      PMA_ARBITRARY: 0
+      # PMA_USER: ${DB_USERNAME}
+      # PMA_PASSWORD: ${DB_PASSWORD}
+      # PMA_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     ports:
       - "8084:80"
     networks:
