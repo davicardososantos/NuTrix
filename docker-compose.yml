@@ -9,10 +9,10 @@ services:
     environment:
       - DB_CONNECTION=mysql
       - DB_HOST=mysql
-      - DB_PORT=3306
-      - DB_DATABASE=laravel
-      - DB_USERNAME=laravel
-      - DB_PASSWORD=laravel
+      - DB_PORT=${DB_PORT}
+      - DB_DATABASE=${DB_DATABASE}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
     volumes:
       - ./src:/var/www
     networks:
@@ -39,16 +39,30 @@ services:
     container_name: nutrix_mysql
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: laravel
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_PASSWORD: laravel
-      MYSQL_USER: laravel
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
     volumes:
       - dbdata:/var/lib/mysql
     networks:
       - laravel
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: nutrix_phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: ${DB_USERNAME}
+      PMA_PASSWORD: ${DB_PASSWORD}
+      PMA_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
     ports:
-      - "3306:3306"
+      - "8084:80"
+    networks:
+      - laravel
+    depends_on:
+      - mysql
 
 networks:
   laravel:
