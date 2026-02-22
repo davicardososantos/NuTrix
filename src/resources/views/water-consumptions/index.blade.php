@@ -7,7 +7,7 @@
                 </h2>
                 <p class="text-sm text-gray-500 mt-2">Acompanhe seu consumo diário e histórico</p>
             </div>
-            <a href="{{ route('water-consumptions.index') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150">
+            <a href="{{ route('water-consumptions.index') }}" class="inline-flex items-center px-4 py-2 bg-nutri text-white border border-transparent rounded-md font-semibold text-xs uppercase tracking-widest hover:bg-nutri-dark active:bg-nutri-dark/90 focus:outline-none focus:ring-2 focus:ring-nutri focus:ring-offset-2 transition ease-in-out duration-150">
                 🔄 Atualizar
             </a>
         </div>
@@ -28,8 +28,8 @@
                         <!-- Seção de Meta/Progresso -->
                         <div class="lg:col-span-6">                            
                             <div class="flex items-start justify-between mb-8">
-                                <div class="bg-blue-100 px-4 py-2 rounded-full">
-                                    <p class="text-xs font-bold text-blue-700">⏰ Agora</p>
+                                <div style="background-color: rgba(113,132,38,0.08);" class="px-4 py-2 rounded-full">
+                                    <p class="text-xs font-bold text-nutri-dark">⏰ Agora</p>
                                 </div>
                             </div>
                             <div class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
@@ -42,13 +42,13 @@
                                         </div>
                                     </div>
                                     <div class="text-right">
-                                        <p class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-700">{{ round(($totalToday / 2500) * 100, 0) }}%</p>
+                                        <p class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-nutri to-nutri-dark">{{ round(($totalToday / 2500) * 100, 0) }}%</p>
                                         <p class="text-xs text-gray-500 font-semibold mt-1">concluído</p>
                                     </div>
                                 </div>
 
                                 <div class="relative w-full bg-gray-300 rounded-full overflow-hidden h-5 shadow-md">
-                                    <div class="absolute top-0 left-0 h-full rounded-full transition-all duration-1000 ease-out flex items-center justify-end pr-3" style="width: {{ min(($totalToday / 2500) * 100, 100) }}%; background: linear-gradient(to right, #3b82f6, #1d4ed8); box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.1), 0 0 10px rgba(59, 130, 246, 0.8);">
+                                    <div class="absolute top-0 left-0 h-full rounded-full transition-all duration-1000 ease-out flex items-center justify-end pr-3" style="width: {{ min(($totalToday / 2500) * 100, 100) }}%; background: linear-gradient(to right, #718426, #485f24); box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.1), 0 0 10px rgba(113,132,38,0.8);">
                                         <span class="text-xs font-bold text-white drop-shadow-lg">{{ round(($totalToday / 2500) * 100, 0) }}%</span>
                                     </div>
                                 </div>

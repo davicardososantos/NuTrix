@@ -23,3 +23,9 @@ jobs:
       - name: Subir arquivos para o servidor
         run: |
             rsync -avz ./ root@${{ secrets.HOSTINGER_IP }}:/root/nutrix/
+      - name: Rodar migrations no servidor
+        run: |
+            ssh root@${{ secrets.HOSTINGER_IP }} << 'EOF'
+              cd /root/nutrix/src
+              docker compose exec -T app php artisan migrate --force
+            EOF

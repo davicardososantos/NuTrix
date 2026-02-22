@@ -11,6 +11,14 @@ export default {
 
     theme: {
         extend: {
+            colors: {
+                nutri: {
+                    DEFAULT: '#718426', // Verde amarelado — primary
+                    dark: '#485f24',    // Verde escuro — primary dark
+                    olive: '#a5ac2e',   // Verde oliva apagado — secondary/neutral
+                    accent: '#cd9f29',  // Laranja apagado — accent
+                },
+            },
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },

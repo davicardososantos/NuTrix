@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+	--color-primary: #718426; /* Verde amarelado */
+	--color-primary-dark: #485f24; /* Verde escuro */
+	--color-olive: #a5ac2e; /* Verde oliva apagado */
+	--color-accent: #cd9f29; /* Laranja apagado */
+}
+
+/* Helper button using CSS variables when needed */
+.btn-nutri {
+	background-color: var(--color-primary);
+	color: #fff;
+}
+.btn-nutri:hover { background-color: var(--color-primary-dark); }
