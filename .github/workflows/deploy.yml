@@ -27,5 +27,8 @@ jobs:
         run: |
             ssh root@${{ secrets.HOSTINGER_IP }} << 'EOF'
               cd /root/nutrix/src
-              docker compose exec -T app php artisan migrate --force
+              docker-compose exec -T app php artisan migrate --force
+              docker-compose exec app chown -R www-data:www-data storage bootstrap/cache
+              docker-compose exec app chmod -R 775 storage bootstrap/cache
+              docker-compose restart
             EOF
