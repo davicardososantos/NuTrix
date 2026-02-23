@@ -23,12 +23,13 @@ jobs:
       - name: Subir arquivos para o servidor
         run: |
             rsync -avz ./ root@${{ secrets.HOSTINGER_IP }}:/root/nutrix/
-      - name: Rodar migrations no servidor
+      - name: Rodar build e migrations no servidor
         run: |
             ssh root@${{ secrets.HOSTINGER_IP }} << 'EOF'
               cd /root/nutrix/src
+              npm run build
               docker-compose exec -T app php artisan migrate --force
-              docker-compose exec app chown -R www-data:www-data storage bootstrap/cache
-              docker-compose exec app chmod -R 775 storage bootstrap/cache
+              docker-compose exec -T app chown -R www-data:www-data storage bootstrap/cache
+              docker-compose exec -T app chmod -R 775 storage bootstrap/cache
               docker-compose restart
             EOF

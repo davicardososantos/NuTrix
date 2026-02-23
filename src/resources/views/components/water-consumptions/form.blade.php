@@ -35,7 +35,7 @@
                 class="block mt-1 w-full"
                 type="date"
                 name="consumption_date"
-                :value="old('consumption_date', $consumption?->consumption_date?->format('Y-m-d'))"
+                :value="old('consumption_date',$consumption?->consumption_date?->format('Y-m-d') ?? today()->format('Y-m-d'))"
                 required
                 max="{{ today()->format('Y-m-d') }}" />
             <x-input-error :messages="$errors->get('consumption_date')" class="mt-2" />

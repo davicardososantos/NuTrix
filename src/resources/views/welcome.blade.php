@@ -3,12 +3,11 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'NuTrix Meta') }}</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
+        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700&display=swap" rel="stylesheet" />
 
         <!-- Styles / Scripts -->
         @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
@@ -19,107 +18,350 @@
             </style>
         @endif
     </head>
-    <body class="bg-[#FDFDFC] dark:bg-[#0a0a0a] text-[#1b1b18] min-h-screen flex flex-col">
-        <header class="w-full">
-            <div class="max-w-7xl mx-auto px-6 lg:px-8 py-6 flex items-center justify-between">
-                <a href="{{ url('/') }}" class="flex items-center gap-3">
-                    <img src="/logo/icone.png" alt="NuTrix icon" class="h-10 w-10 object-contain" />
-                    <img src="/logo/logo.png" alt="NuTrix wordmark" class="hidden md:block h-8 object-contain" />
-                    <span class="md:hidden font-black text-lg text-[#718426]">NuTrix</span>
-                </a>
+    </head>
+    <body class="font-figtree antialiased bg-white">
+        <!-- Navigation Header -->
+        <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-sm border-b border-gray-100">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-center h-16">
+                    <!-- Logo Section -->
+                    <div class="flex items-center gap-3">
+                        <img src="/logo/icone.png" alt="NuTrix" class="h-8 w-8">
+                        <span class="hidden sm:inline text-xl font-bold text-amber-700">NuTrix Meta</span>
+                    </div>
 
-                <nav>
+                    <!-- Navigation Links -->
+                    <div class="hidden md:flex gap-8 items-center">
+                        <a href="#" class="text-gray-600 hover:text-gray-900 text-sm font-medium transition">Features</a>
+                        <a href="#" class="text-gray-600 hover:text-gray-900 text-sm font-medium transition">Para Profissionais</a>
+                        <a href="#" class="text-gray-600 hover:text-gray-900 text-sm font-medium transition">Contato</a>
+                    </div>
+
+                    <!-- Auth Links -->
                     @if (Route::has('login'))
-                        <div class="flex items-center gap-3">
-                            @auth
-                                <a href="{{ url('/dashboard') }}" class="px-4 py-2 rounded-md text-sm font-semibold text-white" style="background:#718426">Dashboard</a>
-                            @else
-                                <a href="{{ route('login') }}" class="px-4 py-2 rounded-md text-sm font-semibold text-white" style="background:#718426">Entrar</a>
-
-                                @if (Route::has('register'))
-                                    <a href="{{ route('register') }}" class="px-4 py-2 rounded-md text-sm font-semibold border" style="border-color:#a5ac2e; color:#485f24">Cadastrar</a>
-                                @endif
-                            @endauth
-                        </div>
-                    @endif
-                </nav>
-            </div>
-        </header>
-
-        <main class="flex-1">
-            <!-- Hero -->
-            <section class="bg-white lg:rounded-2xl shadow-lg max-w-7xl mx-auto my-8 overflow-hidden" style="border:1px solid #f0f0f0;">
-                <div class="lg:flex">
-                    <div class="lg:w-1/2 p-10 lg:p-16">
-                        <h1 class="text-3xl lg:text-4xl font-extrabold text-[#485f24] mb-4">NuTrix <span class="font-medium text-[#cd9f29]">Meta</span></h1>
-                        <p class="text-gray-600 mb-6">Nutrição orientada a metas. Resultados reais. Plataforma para nutricionistas criarem planos, acompanhar evolução e alcançar metas com clareza.</p>
-
-                        <ul class="space-y-3 mb-6">
-                            <li class="flex items-center gap-3">
-                                <span class="inline-flex items-center justify-center h-9 w-9 rounded-full" style="background:#718426;color:#fff">💡</span>
-                                <span class="text-sm font-medium">Cadastro inteligente de pacientes</span>
-                            </li>
-                            <li class="flex items-center gap-3">
-                                <span class="inline-flex items-center justify-center h-9 w-9 rounded-full" style="background:#a5ac2e;color:#fff">📊</span>
-                                <span class="text-sm font-medium">Acompanhamento de metas: água, peso e medidas</span>
-                            </li>
-                            <li class="flex items-center gap-3">
-                                <span class="inline-flex items-center justify-center h-9 w-9 rounded-full" style="background:#cd9f29;color:#fff">⚙️</span>
-                                <span class="text-sm font-medium">Planos alimentares e registro de refeições</span>
-                            </li>
-                        </ul>
-
-                        <div class="flex items-center gap-3">
-                            <a href="{{ route('login') }}" class="px-5 py-3 rounded-md font-semibold text-white" style="background:#718426">Entrar</a>
+                        <div class="flex gap-3">
+                            <a href="{{ route('login') }}" class="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 transition">
+                                Entrar
+                            </a>
                             @if (Route::has('register'))
-                                <a href="{{ route('register') }}" class="px-5 py-3 rounded-md font-semibold border" style="border-color:#a5ac2e; color:#485f24">Criar conta</a>
+                                <a href="{{ route('register') }}" class="px-4 py-2 rounded-lg bg-amber-700 text-white text-sm font-medium hover:bg-amber-800 transition">
+                                    Registrar
+                                </a>
                             @endif
                         </div>
+                    @endif
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="relative overflow-hidden py-20 sm:py-28 lg:py-32">
+            <div class="absolute inset-0 bg-gradient-to-br from-amber-50 via-white to-green-50 -z-10"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <!-- Left Column: Marketing copy -->
+                    <div class="space-y-6">
+                        <h1 class="text-4xl sm:text-5xl lg:text-5xl font-extrabold text-gray-900 leading-tight">
+                            NuTrix Meta
+                            <span class="block text-2xl font-semibold text-amber-700 mt-2">Nutrição orientada a metas. Resultados reais.</span>
+                        </h1>
+
+                        <p class="text-lg text-gray-600 max-w-xl">
+                            Plataforma pensada para nutricionistas que desejam entregar transformação com simplicidade e clareza. Combine dados, metas e acompanhamento contínuo para levar seus pacientes do ponto atual até a meta.
+                        </p>
+
+                        <div class="grid grid-cols-2 gap-4 mt-4">
+                            <div class="p-4 bg-white rounded-lg shadow-sm border border-gray-100">
+                                <p class="text-sm text-gray-500">🎯 Propósito</p>
+                                <p class="text-sm font-semibold text-gray-900">Acompanhar a jornada do paciente até a meta</p>
+                            </div>
+                            <div class="p-4 bg-white rounded-lg shadow-sm border border-gray-100">
+                                <p class="text-sm text-gray-500">👩‍⚕️ Para quem</p>
+                                <p class="text-sm font-semibold text-gray-900">Nutricionistas clínicos, esportivos e pacientes</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 flex flex-col sm:flex-row gap-3">
+                            @if (Route::has('register'))
+                                <a href="{{ route('register') }}" class="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-gradient-to-r from-amber-700 to-green-700 text-white font-semibold shadow hover:scale-105 transition">
+                                    Sou Nutricionista
+                                </a>
+                            @endif
+
+                            <a href="{{ route('login') }}" class="inline-flex items-center justify-center px-6 py-3 rounded-lg bg-white border border-gray-200 text-gray-800 font-semibold hover:shadow-sm transition">
+                                Sou Paciente
+                            </a>
+                        </div>
+
+                        <div class="mt-6 text-sm text-gray-600 space-y-2">
+                            <p class="font-semibold">Principais funcionalidades</p>
+                            <ul class="grid sm:grid-cols-2 gap-2 list-inside">
+                                <li>• Cadastro inteligente de pacientes e histórico clínico</li>
+                                <li>• Planos alimentares personalizados e modelos prontos</li>
+                                <li>• Acompanhamento de metas: peso, IMC e medidas</li>
+                                <li>• Registro de refeições com fotos e feedback</li>
+                            </ul>
+                        </div>
                     </div>
 
-                    <div class="lg:w-1/2 bg-gradient-to-b from-[#fffef9] to-[#f7fff0] p-8 flex items-center justify-center">
-                        <div class="max-w-md text-center">
-                            <img src="/logo/icone.png" alt="NuTrix icon" class="mx-auto h-28 w-28 mb-6" />
-                            <h3 class="text-xl font-bold text-[#485f24] mb-2">Transforme acompanhamento em resultado</h3>
-                            <p class="text-gray-600">Interface limpa, visual moderno e foco total em metas — feita para nutricionistas que entregam resultados.</p>
+                    <!-- Right Column: Visual card -->
+                    <div class="hidden md:block animate-fade-in delay-150">
+                        <div class="relative">
+                            <div class="absolute inset-0 bg-gradient-to-r from-amber-400 to-green-400 rounded-3xl blur-3xl opacity-20"></div>
+                            <div class="relative bg-white rounded-2xl p-8 shadow-2xl border border-gray-100">
+                                <div class="space-y-6">
+                                    <div class="text-6xl text-center">💧</div>
+                                    <div class="space-y-2">
+                                        <div class="text-sm font-semibold text-gray-600">Progresso de Hidratação</div>
+                                        <div class="w-full bg-gray-200 rounded-full h-2">
+                                            <div class="bg-gradient-to-r from-amber-700 to-green-700 h-2 rounded-full w-2/3"></div>
+                                        </div>
+                                        <div class="text-xs text-gray-500">2.5L de 2.5L</div>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-3 pt-4">
+                                        <div class="bg-amber-50 rounded-lg p-3 text-center">
+                                            <div class="text-2xl font-bold text-amber-700">Meta</div>
+                                            <div class="text-xs text-gray-600">Atingida</div>
+                                        </div>
+                                        <div class="bg-green-50 rounded-lg p-3 text-center">
+                                            <div class="text-2xl font-bold text-green-700">Consistência</div>
+                                            <div class="text-xs text-gray-600">98%</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <!-- Features / About -->
-            <section class="max-w-7xl mx-auto px-6 lg:px-8 mb-16">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="p-6 bg-white rounded-lg shadow">
-                        <h4 class="font-bold text-[#485f24] mb-2">Propósito</h4>
-                        <p class="text-sm text-gray-600">Levar cada paciente do ponto atual até sua meta com acompanhamento estruturado, visual e eficiente.</p>
+        <!-- Features Section -->
+        <section class="py-20 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                        Recursos Poderosos
+                    </h2>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                        Ferramentas desenvolvidas especificamente para profissionais de nutrição
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Feature 1 -->
+                    <div class="card-hover bg-white rounded-xl p-8 shadow-sm border border-gray-100 animate-fade-in-up delay-100">
+                        <div class="text-4xl mb-4">📊</div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Análise Detalhada</h3>
+                        <p class="text-gray-600">
+                            Visualize padrões de consumo, identifique tendências e ajuste estratégias nutricionais com precisão.
+                        </p>
                     </div>
 
-                    <div class="p-6 bg-white rounded-lg shadow">
-                        <h4 class="font-bold text-[#485f24] mb-2">Para quem é</h4>
-                        <ul class="text-sm text-gray-600 list-disc list-inside">
-                            <li>Nutricionistas clínicos e esportivos</li>
-                            <li>Profissionais de emagrecimento</li>
-                            <li>Consultórios e atendimento online</li>
+                    <!-- Feature 2 -->
+                    <div class="card-hover bg-white rounded-xl p-8 shadow-sm border border-gray-100 animate-fade-in-up delay-200">
+                        <div class="text-4xl mb-4">🎯</div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Metas Personalizadas</h3>
+                        <p class="text-gray-600">
+                            Defina objetivos de hidratação específicos para cada paciente ou atleta com base em necessidades individuais.
+                        </p>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="card-hover bg-white rounded-xl p-8 shadow-sm border border-gray-100 animate-fade-in-up delay-300">
+                        <div class="text-4xl mb-4">📱</div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Interface Intuitiva</h3>
+                        <p class="text-gray-600">
+                            Design responsivo e fácil de usar, tanto no computador quanto no celular dos seus pacientes.
+                        </p>
+                    </div>
+
+                    <!-- Feature 4 -->
+                    <div class="card-hover bg-white rounded-xl p-8 shadow-sm border border-gray-100 animate-fade-in-up delay-400">
+                        <div class="text-4xl mb-4">🔐</div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Segurança de Dados</h3>
+                        <p class="text-gray-600">
+                            Seus dados estão protegidos com criptografia de ponta e conformidade com regulações de saúde.
+                        </p>
+                    </div>
+
+                    <!-- Feature 5 -->
+                    <div class="card-hover bg-white rounded-xl p-8 shadow-sm border border-gray-100 animate-fade-in-up delay-500">
+                        <div class="text-4xl mb-4">📈</div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Relatórios Profissionais</h3>
+                        <p class="text-gray-600">
+                            Gere relatórios claros e impressionantes para compartilhar com pacientes ou orientadores de forma automatizada.
+                        </p>
+                    </div>
+
+                    <!-- Feature 6 -->
+                    <div class="card-hover bg-white rounded-xl p-8 shadow-sm border border-gray-100 animate-fade-in-up delay-600">
+                        <div class="text-4xl mb-4">⚡</div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Performance Rápida</h3>
+                        <p class="text-gray-600">
+                            Sincronização instantânea entre dispositivos, sem latência, mesmo em conexões lentas.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Use Cases Section -->
+        <section class="py-20 bg-white">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                        Para Todos os Profissionais
+                    </h2>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                        Independente do seu segmento, NuTrix Meta se adapta às suas necessidades
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Use Case 1 -->
+                    <div class="card-hover bg-gradient-to-br from-green-50 to-white rounded-xl p-8 border border-green-100 animate-fade-in-up delay-100">
+                        <div class="text-5xl mb-4">🏥</div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-3">Nutricionista Clínico</h3>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Gerencie pacientes com condições específicas, ajuste planos nutricionais e acompanhe a evolução.
+                        </p>
+                        <div class="text-xs text-green-700 font-semibold">✓ Prontuário digital</div>
+                    </div>
+
+                    <!-- Use Case 2 -->
+                    <div class="card-hover bg-gradient-to-br from-amber-50 to-white rounded-xl p-8 border border-amber-100 animate-fade-in-up delay-200">
+                        <div class="text-5xl mb-4">🏃</div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-3">Nutrição para Atletas</h3>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Otimize o desempenho esportivo com monitoramento preciso de hidratação e nutrientes.
+                        </p>
+                        <div class="text-xs text-amber-700 font-semibold">✓ Diários treino</div>
+                    </div>
+
+                    <!-- Use Case 3 -->
+                    <div class="card-hover bg-gradient-to-br from-orange-50 to-white rounded-xl p-8 border border-orange-100 animate-fade-in-up delay-300">
+                        <div class="text-5xl mb-4">⚖️</div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-3">Perda de Peso</h3>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Acompanhe progressos reais com dados concretos, motivando seus pacientes todos os dias.
+                        </p>
+                        <div class="text-xs text-orange-700 font-semibold">✓ Gráficos motivadores</div>
+                    </div>
+
+                    <!-- Use Case 4 -->
+                    <div class="card-hover bg-gradient-to-br from-blue-50 to-white rounded-xl p-8 border border-blue-100 animate-fade-in-up delay-400">
+                        <div class="text-5xl mb-4">🏢</div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-3">Consultório Particular</h3>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Aumente a eficiência, reduza o tempo de papelada e foque no que importa: seus pacientes.
+                        </p>
+                        <div class="text-xs text-blue-700 font-semibold">✓ Gestão simplificada</div>
+                    </div>
+
+                    <!-- Use Case 5 -->
+                    <div class="card-hover bg-gradient-to-br from-purple-50 to-white rounded-xl p-8 border border-purple-100 animate-fade-in-up delay-500">
+                        <div class="text-5xl mb-4">💻</div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-3">Nutrição Online</h3>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Expanda seu negócio sem limitações geográficas, com ferramentas para atender remotamente.
+                        </p>
+                        <div class="text-xs text-purple-700 font-semibold">✓ Sem fronteiras</div>
+                    </div>
+
+                    <!-- Use Case 6 -->
+                    <div class="card-hover bg-gradient-to-br from-pink-50 to-white rounded-xl p-8 border border-pink-100 animate-fade-in-up delay-600">
+                        <div class="text-5xl mb-4">🏋️</div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-3">Suplementação</h3>
+                        <p class="text-gray-600 text-sm mb-4">
+                            Integre dados de suplementação com consumo de água, criando protocolos completos.
+                        </p>
+                        <div class="text-xs text-pink-700 font-semibold">✓ Protocolo integrado</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="relative py-20 bg-gradient-to-r from-green-900 via-green-800 to-amber-700 overflow-hidden">
+            <!-- Decorative elements -->
+            <div class="absolute top-0 right-0 w-96 h-96 bg-white opacity-10 rounded-full blur-3xl -mr-48 -mt-48"></div>
+            <div class="absolute bottom-0 left-0 w-96 h-96 bg-white opacity-10 rounded-full blur-3xl -ml-48 -mb-48"></div>
+
+            <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="text-3xl sm:text-4xl font-bold text-white mb-6 animate-fade-in-up">
+                    Pronto para Revolucionar Sua Prática Nutricional?
+                </h2>
+                <p class="text-lg text-white/90 mb-8 max-w-2xl mx-auto animate-fade-in-up delay-100">
+                    Junte-se a centenas de profissionais de saúde que já confiam em NuTrix Meta para gerenciar seus pacientes com excelência.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-200">
+                    @if (Route::has('register'))
+                        <a href="{{ route('register') }}" class="px-8 py-4 rounded-lg bg-white text-green-900 font-bold hover:bg-gray-100 transition-all hover:scale-105 shadow-xl">
+                            Criar Conta Gratuita
+                        </a>
+                    @endif
+                    <button class="px-8 py-4 rounded-lg border-2 border-white text-white font-bold hover:bg-white/10 transition-all">
+                        Agendar Demonstração
+                    </button>
+                </div>
+
+                <p class="text-white/80 text-sm mt-8">
+                    ✓ Sem cartão de crédito  •  ✓ 30 dias grátis  •  ✓ Cancelamento a qualquer hora
+                </p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-gray-900 text-gray-400 py-12">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid md:grid-cols-4 gap-8 mb-8">
+                    <div>
+                        <div class="flex items-center gap-2 mb-4">
+                            <img src="/logo/icone.png" alt="NuTrix" class="h-8 w-8">
+                            <span class="text-white font-bold">NuTrix Meta</span>
+                        </div>
+                        <p class="text-sm">
+                            A melhor plataforma de nutrição orientada a metas para profissionais de saúde.
+                        </p>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-semibold mb-4">Produto</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li><a href="#" class="hover:text-gray-200 transition">Features</a></li>
+                            <li><a href="#" class="hover:text-gray-200 transition">Preços</a></li>
+                            <li><a href="#" class="hover:text-gray-200 transition">Segurança</a></li>
                         </ul>
                     </div>
-
-                    <div class="p-6 bg-white rounded-lg shadow">
-                        <h4 class="font-bold text-[#485f24] mb-2">Diferenciais</h4>
-                        <ul class="text-sm text-gray-600 list-disc list-inside">
-                            <li>Foco total em metas</li>
-                            <li>Interface limpa e organizada</li>
-                            <li>Visual moderno e relatórios rápidos</li>
+                    <div>
+                        <h4 class="text-white font-semibold mb-4">Empresa</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li><a href="#" class="hover:text-gray-200 transition">Sobre</a></li>
+                            <li><a href="#" class="hover:text-gray-200 transition">Blog</a></li>
+                            <li><a href="#" class="hover:text-gray-200 transition">Contato</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="text-white font-semibold mb-4">Legal</h4>
+                        <ul class="space-y-2 text-sm">
+                            <li><a href="#" class="hover:text-gray-200 transition">Privacidade</a></li>
+                            <li><a href="#" class="hover:text-gray-200 transition">Termos</a></li>
+                            <li><a href="#" class="hover:text-gray-200 transition">Cookies</a></li>
                         </ul>
                     </div>
                 </div>
-            </section>
-        </main>
 
-        <footer class="border-t py-6">
-            <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center text-sm text-gray-500">© {{ date('Y') }} NuTrix Meta — Nutrição orientada a metas.</div>
+                <div class="border-t border-gray-800 pt-8 flex justify-between items-center text-sm">
+                    <p>&copy; 2025 NuTrix Meta. Todos os direitos reservados.</p>
+                    <div class="flex gap-6">
+                        <a href="#" class="hover:text-gray-200 transition">Twitter</a>
+                        <a href="#" class="hover:text-gray-200 transition">LinkedIn</a>
+                        <a href="#" class="hover:text-gray-200 transition">GitHub</a>
+                    </div>
+                </div>
+            </div>
         </footer>
-
-        
     </body>
 </html>
