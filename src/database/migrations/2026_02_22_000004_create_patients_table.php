@@ -10,7 +10,11 @@ return new class extends Migration
     {
         Schema::create('patients', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete()->unique();
+            $table->unsignedBigInteger('nutritionist_id')->nullable();
+            $table->foreignId('user_id')->nullable()->constrained()->cascadeOnDelete()->unique();
+            $table->string('full_name');
+            $table->string('email')->unique();
+            $table->string('code')->unique();
             $table->decimal('weight', 6, 2)->nullable();
             $table->decimal('height', 5, 2)->nullable();
             $table->decimal('body_fat_percentage', 5, 2)->nullable();

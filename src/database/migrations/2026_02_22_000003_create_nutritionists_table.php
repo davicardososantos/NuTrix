@@ -11,12 +11,14 @@ return new class extends Migration
         Schema::create('nutritionists', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete()->unique();
-            $table->string('crn')->nullable();
+            $table->string('full_name');
+            $table->string('cpf')->unique();
+            $table->string('crn')->nullable()->unique();
+            $table->string('phone')->nullable();
             $table->string('specialization')->nullable();
+            $table->text('clinic_address')->nullable();
             $table->text('bio')->nullable();
             $table->string('photo_path')->nullable();
-            $table->text('clinic_address')->nullable();
-            $table->string('phone')->nullable();
             $table->timestamps();
         });
     }

@@ -37,22 +37,22 @@
                     <div class="flex items-start justify-between mb-6">
                         <div>
                             <p class="text-sm font-bold text-blue-900 uppercase tracking-widest">⏰ Progresso Hoje</p>
-                            <h3 class="text-3xl font-black text-gray-900 mt-2">{{ round(($totalToday / 2500) * 100, 0) }}%</h3>
+                            <h3 class="text-3xl font-black text-gray-900 mt-2">{{ round(($totalToday / $dailyWaterGoal) * 100, 0) }}%</h3>
                         </div>
                         <div class="text-right">
-                            <p class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600">{{ round($totalToday / 1000, 1) }}L</p>
-                            <p class="text-sm text-gray-600 mt-2 font-medium">de 2,5L</p>
+                            <p class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600">{{ number_format($totalToday / 1000, 1, ',', '.') }}L</p>
+                            <p class="text-sm text-gray-600 mt-2 font-medium">de {{ number_format($dailyWaterGoal / 1000, 1, ',', '.') }}L</p>
                         </div>
                     </div>
 
                     <div class="relative w-full bg-gray-300 rounded-full overflow-hidden h-6 shadow-md">
                         <div class="absolute top-0 left-0 h-full rounded-full transition-all duration-1000 ease-out flex items-center justify-end pr-3" 
-                             style="width: {{ min(($totalToday / 2500) * 100, 100) }}%; background: linear-gradient(to right, #0077be, #00d4ff);">
+                             style="width: {{ min(($totalToday / $dailyWaterGoal) * 100, 100) }}%; background: linear-gradient(to right, #0077be, #00d4ff);">
                         </div>
                     </div>
 
                     <div class="mt-4 pt-4 border-t border-blue-200 grid grid-cols-3 gap-4 text-center">
-                        @if(round(($totalToday / 2500) * 100, 0) >= 100)
+                        @if(round(($totalToday / $dailyWaterGoal) * 100, 0) >= 100)
                             <div class="p-3 bg-green-100 rounded-lg">
                                 <p class="text-2xl">🎉</p>
                                 <p class="text-xs font-bold text-green-900 mt-1">Meta Atingida!</p>
@@ -68,7 +68,7 @@
                             <p class="text-xs font-bold text-gray-700 mt-1">ml Bebidos</p>
                         </div>
                         <div class="p-3 bg-blue-100 rounded-lg">
-                            <p class="text-xl text-blue-600">{{ intval(2500 - $totalToday) }}</p>
+                            <p class="text-xl text-blue-600">{{ intval($dailyWaterGoal - $totalToday) }}</p>
                             <p class="text-xs font-bold text-blue-900 mt-1">ml Restante</p>
                         </div>
                     </div>
@@ -99,7 +99,7 @@
                 </div>
             </div>
 
-            <!-- Form & History Section -->
+            <!-- Form & History & Chart Section -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <!-- Left: Form -->
                 <div class="lg:col-span-1">
@@ -109,8 +109,44 @@
                     </div>
                 </div>
 
-                <!-- Right: History -->
-                <div class="lg:col-span-2">
+                <!-- Right: History & Chart -->
+                <div class="lg:col-span-2 space-y-8">
+                    <!-- 7 Days Chart -->
+                    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
+                        <div class="p-6 border-b border-gray-200">
+                            <h3 class="text-xl font-bold text-gray-900">📊 Últimos 7 Dias</h3>
+                        </div>
+                        
+                        <div class="p-6">
+                            <div class="grid grid-cols-7 gap-2">
+                                @foreach($sevenDaysData as $day)
+                                    <div class="text-center">
+                                        <p class="text-xs font-semibold text-gray-600 mb-2 uppercase">{{ substr($day['day'], 0, 3) }}</p>
+                                        <p class="text-xs text-gray-500 mb-3">{{ $day['shortDay'] }}</p>
+                                        
+                                        <div class="relative h-32 bg-gray-100 rounded-lg flex items-end justify-center p-1 border-2 border-gray-200 hover:border-blue-400 transition">
+                                            @php
+                                                $percentage = $dailyWaterGoal > 0 ? min(($day['amount_ml'] / $dailyWaterGoal) * 100, 100) : 0;
+                                            @endphp
+                                            <div class="w-full rounded-md transition-all duration-300" 
+                                                 style="height: {{ $percentage }}%; background: linear-gradient(to top, #0077be, #00d4ff);">
+                                            </div>
+                                        </div>
+                                        
+                                        <p class="text-sm font-bold text-gray-900 mt-2">{{ number_format($day['amount_ml'] / 1000, 2, ',', '.') }}L</p>
+                                        
+                                        @if($day['amount_ml'] >= $dailyWaterGoal)
+                                            <span class="text-lg">✓</span>
+                                        @else
+                                            <span class="text-xs text-red-600">{{ intval($dailyWaterGoal - $day['amount_ml']) }}ml</span>
+                                        @endif
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- History -->
                     <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
                         <div class="p-6 border-b border-gray-200 flex items-center justify-between">
                             <h3 class="text-xl font-bold text-gray-900">📜 Histórico</h3>
@@ -131,8 +167,8 @@
                                                     💧
                                                 </div>
                                                 <div>
-                                                    <p class="font-semibold text-gray-900">{{ $consumption->amount_ml }} ml</p>
-                                                    <p class="text-xs text-gray-500">{{ $consumption->created_at->format('d/m/Y H:i') }}</p>
+                                                        <p class="font-semibold text-gray-900">{{ $consumption->amount_ml }} ml</p>
+                                                        <p class="text-xs text-gray-500">{{ $consumption->created_at->format('d/m') }}</p>
                                                 </div>
                                             </div>
                                             <div class="flex items-center gap-2">

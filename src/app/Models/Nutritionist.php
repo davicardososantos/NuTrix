@@ -11,16 +11,26 @@ class Nutritionist extends Model
 
     protected $fillable = [
         'user_id',
+        'full_name',
+        'cpf',
         'crn',
+        'phone',
         'specialization',
+        'clinic_address',
         'bio',
         'photo_path',
-        'clinic_address',
-        'phone',
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get all patients for the nutritionist.
+     */
+    public function patients()
+    {
+        return $this->hasMany(Patient::class);
     }
 }

@@ -10,7 +10,11 @@ class Patient extends Model
     use HasFactory;
 
     protected $fillable = [
+        'nutritionist_id',
         'user_id',
+        'full_name',
+        'email',
+        'code',
         'weight',
         'height',
         'body_fat_percentage',
@@ -19,6 +23,17 @@ class Patient extends Model
         'medical_notes',
     ];
 
+    /**
+     * Get the nutritionist that owns the patient.
+     */
+    public function nutritionist()
+    {
+        return $this->belongsTo(Nutritionist::class);
+    }
+
+    /**
+     * Get the user associated with the patient.
+     */
     public function user()
     {
         return $this->belongsTo(User::class);
