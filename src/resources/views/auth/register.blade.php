@@ -82,48 +82,48 @@
         const emailCheckMessage = document.getElementById('emailCheckMessage');
         let isEmailExists = false;
 
-        emailInput.addEventListener('blur', async () => {
-            const email = emailInput.value.trim();
+        // emailInput.addEventListener('blur', async () => {
+        //     const email = emailInput.value.trim();
             
-            if (!email || !email.includes('@')) {
-                emailCheckMessage.classList.add('hidden');
-                return;
-            }
+        //     if (!email || !email.includes('@')) {
+        //         emailCheckMessage.classList.add('hidden');
+        //         return;
+        //     }
 
-            try {
-                const response = await fetch('{{ route("api.check-email") }}', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
-                    },
-                    body: JSON.stringify({ email }),
-                });
+        //     try {
+                // const response = await fetch('', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Content-Type': 'application/json',
+        //                 'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value,
+        //             },
+        //             body: JSON.stringify({ email }),
+        //         });
 
-                const data = await response.json();
-                isEmailExists = data.exists;
+        //         const data = await response.json();
+        //         isEmailExists = data.exists;
 
-                if (isEmailExists) {
-                    emailCheckMessage.classList.remove('hidden');
-                    emailCheckMessage.className = 'text-sm mt-2 bg-blue-50 border border-blue-200 text-blue-900 p-2 rounded';
-                    emailCheckMessage.innerHTML = '✓ Este email já existe no sistema. Não será necessário definir uma senha.';
-                    passwordInput.disabled = true;
-                    passwordConfirmInput.disabled = true;
-                    passwordInput.value = '';
-                    passwordConfirmInput.value = '';
-                    passwordInput.removeAttribute('required');
-                    passwordConfirmInput.removeAttribute('required');
-                } else {
-                    emailCheckMessage.classList.add('hidden');
-                    passwordInput.disabled = false;
-                    passwordConfirmInput.disabled = false;
-                    passwordInput.setAttribute('required', 'required');
-                    passwordConfirmInput.setAttribute('required', 'required');
-                }
-            } catch (error) {
-                console.error('Erro ao verificar email:', error);
-            }
-        });
+        //         if (isEmailExists) {
+        //             emailCheckMessage.classList.remove('hidden');
+        //             emailCheckMessage.className = 'text-sm mt-2 bg-blue-50 border border-blue-200 text-blue-900 p-2 rounded';
+        //             emailCheckMessage.innerHTML = '✓ Este email já existe no sistema. Não será necessário definir uma senha.';
+        //             passwordInput.disabled = true;
+        //             passwordConfirmInput.disabled = true;
+        //             passwordInput.value = '';
+        //             passwordConfirmInput.value = '';
+        //             passwordInput.removeAttribute('required');
+        //             passwordConfirmInput.removeAttribute('required');
+        //         } else {
+        //             emailCheckMessage.classList.add('hidden');
+        //             passwordInput.disabled = false;
+        //             passwordConfirmInput.disabled = false;
+        //             passwordInput.setAttribute('required', 'required');
+        //             passwordConfirmInput.setAttribute('required', 'required');
+        //         }
+        //     } catch (error) {
+        //         console.error('Erro ao verificar email:', error);
+        //     }
+        // });
 
         // Form validation before submit
         document.querySelector('form').addEventListener('submit', (e) => {
@@ -133,3 +133,4 @@
             }
         });
     </script>
+</x-guest-layout>
