@@ -42,6 +42,13 @@ class PatientController extends Controller
         $validated = $request->validate([
             'full_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:patients,email'],
+            'birth_date' => ['nullable', 'date'],
+            'biological_sex' => ['nullable', 'string', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:255'],
+            'profession' => ['nullable', 'string', 'max:255'],
+            'work_routine' => ['nullable', 'string'],
+            'main_goal' => ['nullable', 'string'],
+            'referral_source' => ['nullable', 'string', 'max:255'],
             'weight' => ['nullable', 'numeric', 'min:0'],
             'height' => ['nullable', 'numeric', 'min:0'],
         ], [
@@ -115,6 +122,13 @@ class PatientController extends Controller
         $validated = $request->validate([
             'full_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:patients,email,' . $patient->id],
+            'birth_date' => ['nullable', 'date'],
+            'biological_sex' => ['nullable', 'string', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:255'],
+            'profession' => ['nullable', 'string', 'max:255'],
+            'work_routine' => ['nullable', 'string'],
+            'main_goal' => ['nullable', 'string'],
+            'referral_source' => ['nullable', 'string', 'max:255'],
             'weight' => ['nullable', 'numeric', 'min:0'],
             'height' => ['nullable', 'numeric', 'min:0'],
             'body_fat_percentage' => ['nullable', 'numeric', 'min:0', 'max:100'],
@@ -125,7 +139,7 @@ class PatientController extends Controller
 
         $patient->update($validated);
 
-        return redirect()->route('patients.index')
+        return redirect()->route('patients.edit', $patient)
             ->with('success', 'Paciente atualizado com sucesso!');
     }
 

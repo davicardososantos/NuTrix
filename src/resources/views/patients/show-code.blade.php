@@ -1,9 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-start md:items-center gap-4">
             <div>
-                <h2 class="font-black text-3xl text-gray-900">✅ Paciente Cadastrado</h2>
-                <p class="text-gray-600 mt-1">Compartilhe o código abaixo para que seu paciente se registre</p>
+                <h2 class="font-black text-2xl md:text-3xl text-gray-900 flex items-center gap-3">
+                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center">
+                        <x-icon icon="check" size="lg" class="text-green-600" />
+                    </div>
+                    Paciente Cadastrado
+                </h2>
+                <p class="text-gray-600 mt-1 text-sm md:text-base">Compartilhe o código abaixo para que seu paciente se registre</p>
             </div>
             <a href="{{ route('patients.index') }}" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition font-semibold text-sm">
                 ← Voltar
@@ -14,8 +19,10 @@
     <div class="py-12">
         <div class="max-w-2xl mx-auto sm:px-6 lg:px-8">
             <!-- Success Card -->
-            <div class="bg-white rounded-2xl shadow-lg border border-green-200 p-8 text-center mb-6">
-                <div class="text-6xl mb-4">🎉</div>
+            <div class="bg-gradient-to-br from-green-50 to-emerald-50 rounded-2xl border border-green-200 p-8 text-center mb-6">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <x-icon icon="check" size="lg" class="text-green-600 w-8 h-8" />
+                </div>
                 <h3 class="text-2xl font-bold text-gray-900 mb-2">{{ $patient->full_name }}</h3>
                 <p class="text-gray-600 mb-6">Paciente cadastrado com sucesso! Agora compartilhe o código abaixo.</p>
 
@@ -78,7 +85,10 @@
             <!-- Action Buttons -->
             <div class="flex gap-4">
                 <a href="{{ route('patients.create') }}" class="flex-1 px-6 py-3 bg-gradient-to-r from-amber-700 to-green-700 text-white font-semibold rounded-lg hover:shadow-lg hover:scale-105 transition-all text-center">
-                    ➕ Cadastrar Outro Paciente
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Cadastrar Outro Paciente
                 </a>
                 <a href="{{ route('patients.index') }}" class="flex-1 px-6 py-3 bg-gray-200 text-gray-800 font-semibold rounded-lg hover:bg-gray-300 transition text-center">
                     Ir para Meus Pacientes
@@ -96,7 +106,7 @@
             // Visual feedback
             const button = event.target;
             const originalText = button.textContent;
-            button.textContent = '✓ Copiado!';
+            button.textContent = 'Copiado!';
             button.classList.add('bg-green-600');
             
             setTimeout(() => {

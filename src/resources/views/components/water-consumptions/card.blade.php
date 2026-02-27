@@ -18,14 +18,8 @@
             {{ __('Editar') }}
         </a>
         
-        <form action="{{ route('water-consumptions.destroy', $consumption) }}" method="POST" class="inline">
-            @csrf
-            @method('DELETE')
-            <button type="submit" 
-                    onclick="return confirm('Tem certeza?')"
-                    class="inline-flex items-center px-3 py-1 bg-red-100 text-red-700 rounded text-sm hover:bg-red-200 transition">
-                {{ __('Deletar') }}
-            </button>
-        </form>
+        <x-delete-modal :action="route('water-consumptions.destroy', $consumption)" title="Deletar Consumo" message="Tem certeza que deseja deletar este consumo? Esta ação não pode ser desfeita." button-text="Deletar" class="px-3 py-1 bg-red-100 text-red-700 rounded text-sm hover:bg-red-200">
+            {{ __('Deletar') }}
+        </x-delete-modal>
     </div>
 </div>

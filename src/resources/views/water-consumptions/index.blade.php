@@ -1,245 +1,197 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-start">
-            <div>
-                <h2 class="font-black text-4xl text-gray-900">
-                    💧 Meu Consumo de Água
-                </h2>
-                <p class="text-gray-600 mt-2">Acompanhe seu hidratação diária e evolução</p>
-            </div>
-            <div class="flex gap-2">
-                <a href="{{ route('dashboard') }}" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition font-semibold text-sm">
-                    ← Voltar
-                </a>
-                <a href="{{ route('water-consumptions.index') }}" class="px-6 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-lg hover:shadow-lg hover:scale-105 transition-all font-semibold">
-                    🔄 Atualizar
-                </a>
+    <div class="min-h-screen bg-gradient-to-b from-blue-50 via-white to-white pb-20 md:pb-6">
+        <!-- Header -->
+        <div class="bg-white border-b border-gray-100 z-30">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4 md:py-6">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-droplet text-xl md:text-2xl text-cyan-600"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl md:text-3xl font-black text-gray-900">Hidratação</h1>
+                        <p class="text-xs md:text-sm text-gray-500 mt-0.5">Acompanhe seu consumo de água</p>
+                    </div>
+                </div>
             </div>
         </div>
-    </x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8">
+            <!-- Success Alert -->
             @if(session('success'))
-                <div class="mb-6 p-4 bg-green-50 border border-green-200 text-green-800 rounded-lg flex items-start gap-3">
-                    <span class="text-xl">✅</span>
-                    <div>
-                        <p class="font-semibold">Consumo registrado com sucesso!</p>
-                        <p class="text-sm text-green-700">Você está no caminho certo! 💪</p>
-                    </div>
+                <div class="mb-6 p-4 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-xl flex items-center gap-3 animate-in fade-in slide-in-from-top-4 duration-300">
+                    <i class="fas fa-check-circle text-lg text-green-600 flex-shrink-0"></i>
+                    <p class="font-semibold text-sm text-green-900">{{ session('success') }}</p>
                 </div>
             @endif
 
-            <!-- Hero Stats Section -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <!-- Card 1: Progress Today -->
-                <div class="md:col-span-2 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-2xl shadow-lg p-8 border border-blue-100">
-                    <div class="flex items-start justify-between mb-6">
-                        <div>
-                            <p class="text-sm font-bold text-blue-900 uppercase tracking-widest">⏰ Progresso Hoje</p>
-                            <h3 class="text-3xl font-black text-gray-900 mt-2">{{ round(($totalToday / $dailyWaterGoal) * 100, 0) }}%</h3>
-                        </div>
-                        <div class="text-right">
-                            <p class="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600">{{ number_format($totalToday / 1000, 1, ',', '.') }}L</p>
-                            <p class="text-sm text-gray-600 mt-2 font-medium">de {{ number_format($dailyWaterGoal / 1000, 1, ',', '.') }}L</p>
-                        </div>
+            <!-- Main Progress Card -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <!-- Progress Card -->
+                <div class="bg-gradient-to-br from-blue-600 to-cyan-600 rounded-3xl p-6 md:p-8 text-white shadow-lg shadow-blue-200 relative overflow-hidden group">
+                    <!-- Animated background -->
+                    <div class="absolute inset-0 opacity-20">
+                        <div class="absolute top-0 right-0 w-40 h-40 bg-white rounded-full blur-3xl"></div>
                     </div>
 
-                    <div class="relative w-full bg-gray-300 rounded-full overflow-hidden h-6 shadow-md">
-                        <div class="absolute top-0 left-0 h-full rounded-full transition-all duration-1000 ease-out flex items-center justify-end pr-3" 
-                             style="width: {{ min(($totalToday / $dailyWaterGoal) * 100, 100) }}%; background: linear-gradient(to right, #0077be, #00d4ff);">
-                        </div>
-                    </div>
-
-                    <div class="mt-4 pt-4 border-t border-blue-200 grid grid-cols-3 gap-4 text-center">
-                        @if(round(($totalToday / $dailyWaterGoal) * 100, 0) >= 100)
-                            <div class="p-3 bg-green-100 rounded-lg">
-                                <p class="text-2xl">🎉</p>
-                                <p class="text-xs font-bold text-green-900 mt-1">Meta Atingida!</p>
+                    <div class="relative z-10">
+                        <div class="flex items-start justify-between mb-8">
+                            <div>
+                                <p class="text-blue-100 text-xs font-bold uppercase tracking-widest">Progresso de Hoje</p>
+                                <p class="text-5xl md:text-6xl font-black mt-2">{{ round(($totalToday / $dailyWaterGoal) * 100, 0) }}<span class="text-3xl">%</span></p>
                             </div>
-                        @else
-                            <div class="p-3 bg-amber-100 rounded-lg">
-                                <p class="text-2xl">🏃</p>
-                                <p class="text-xs font-bold text-amber-900 mt-1">Em Progresso</p>
-                            </div>
-                        @endif
-                        <div class="p-3 bg-gray-100 rounded-lg">
-                            <p class="text-xl text-gray-600">{{ intval($totalToday) }}</p>
-                            <p class="text-xs font-bold text-gray-700 mt-1">ml Bebidos</p>
-                        </div>
-                        <div class="p-3 bg-blue-100 rounded-lg">
-                            <p class="text-xl text-blue-600">{{ intval($dailyWaterGoal - $totalToday) }}</p>
-                            <p class="text-xs font-bold text-blue-900 mt-1">ml Restante</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Card 2: Tips & Actions -->
-                <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100 flex flex-col justify-between">
-                    <div>
-                        <p class="text-sm font-bold text-gray-900 uppercase tracking-widest mb-4">💡 Dicas Rápidas</p>
-                        <ul class="space-y-3 text-sm text-gray-600">
-                            <li class="flex gap-2">
-                                <span class="text-lg">🌅</span>
-                                <span>Beba água morna ao despertar</span>
-                            </li>
-                            <li class="flex gap-2">
-                                <span class="text-lg">🍎</span>
-                                <span>Consuma frutas com alto teor de água</span>
-                            </li>
-                            <li class="flex gap-2">
-                                <span class="text-lg">⏰</span>
-                                <span>Estabeleça lembretes de 2h em 2h</span>
-                            </li>
-                        </ul>
-                    </div>
-                    <button class="mt-4 w-full py-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold rounded-lg hover:shadow-lg transition-all">
-                        📱 Definir Lembretes
-                    </button>
-                </div>
-            </div>
-
-            <!-- Form & History & Chart Section -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                <!-- Left: Form -->
-                <div class="lg:col-span-1">
-                    <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
-                        <h3 class="text-xl font-bold text-gray-900 mb-6">Novo Consumo</h3>
-                        <x-water-consumptions.form />
-                    </div>
-                </div>
-
-                <!-- Right: History & Chart -->
-                <div class="lg:col-span-2 space-y-8">
-                    <!-- 7 Days Chart -->
-                    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-                        <div class="p-6 border-b border-gray-200">
-                            <h3 class="text-xl font-bold text-gray-900">📊 Últimos 7 Dias</h3>
-                        </div>
-                        
-                        <div class="p-6">
-                            <div class="grid grid-cols-7 gap-2">
-                                @foreach($sevenDaysData as $day)
-                                    <div class="text-center">
-                                        <p class="text-xs font-semibold text-gray-600 mb-2 uppercase">{{ substr($day['day'], 0, 3) }}</p>
-                                        <p class="text-xs text-gray-500 mb-3">{{ $day['shortDay'] }}</p>
-                                        
-                                        <div class="relative h-32 bg-gray-100 rounded-lg flex items-end justify-center p-1 border-2 border-gray-200 hover:border-blue-400 transition">
-                                            @php
-                                                $percentage = $dailyWaterGoal > 0 ? min(($day['amount_ml'] / $dailyWaterGoal) * 100, 100) : 0;
-                                            @endphp
-                                            <div class="w-full rounded-md transition-all duration-300" 
-                                                 style="height: {{ $percentage }}%; background: linear-gradient(to top, #0077be, #00d4ff);">
-                                            </div>
-                                        </div>
-                                        
-                                        <p class="text-sm font-bold text-gray-900 mt-2">{{ number_format($day['amount_ml'] / 1000, 2, ',', '.') }}L</p>
-                                        
-                                        @if($day['amount_ml'] >= $dailyWaterGoal)
-                                            <span class="text-lg">✓</span>
-                                        @else
-                                            <span class="text-xs text-red-600">{{ intval($dailyWaterGoal - $day['amount_ml']) }}ml</span>
-                                        @endif
-                                    </div>
-                                @endforeach
+                            <div class="text-right">
+                                <p class="text-blue-100 text-xs font-bold uppercase tracking-widest">Consumido</p>
+                                <p class="text-4xl font-black mt-2">{{ number_format($totalToday / 1000, 1, ',', '.') }}<span class="text-2xl">L</span></p>
+                                <p class="text-blue-200 text-xs mt-1">de {{ number_format($dailyWaterGoal / 1000, 1, ',', '.') }}L</p>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- History -->
-                    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-                        <div class="p-6 border-b border-gray-200 flex items-center justify-between">
-                            <h3 class="text-xl font-bold text-gray-900">📜 Histórico</h3>
-                            <select class="px-3 py-2 border border-gray-300 rounded-lg text-sm text-gray-600 focus:ring-2 focus:ring-blue-600">
-                                <option>Últimas 24h</option>
-                                <option>Última semana</option>
-                                <option>Últimas 2 semanas</option>
-                            </select>
+                        <!-- Premium Progress Bar -->
+                        <div class="relative w-full bg-white/20 backdrop-blur-sm rounded-full overflow-hidden h-4 shadow-inner mb-4">
+                            <div
+                                class="h-full rounded-full transition-all duration-1000 ease-out bg-gradient-to-r from-white via-blue-100 to-white shadow-lg"
+                                style="width: {{ min(($totalToday / $dailyWaterGoal) * 100, 100) }}%"
+                            ></div>
                         </div>
 
-                        <div class="p-6">
-                            @if($consumptions->count() > 0)
-                                <div class="space-y-3 max-h-96 overflow-y-auto">
-                                    @foreach($consumptions as $consumption)
-                                        <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition border border-gray-200">
-                                            <div class="flex items-center gap-4">
-                                                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-xl">
-                                                    💧
-                                                </div>
-                                                <div>
-                                                        <p class="font-semibold text-gray-900">{{ $consumption->amount_ml }} ml</p>
-                                                        <p class="text-xs text-gray-500">{{ $consumption->created_at->format('d/m') }}</p>
-                                                </div>
-                                            </div>
-                                            <div class="flex items-center gap-2">
-                                                <span class="px-3 py-1 bg-blue-100 text-blue-700 text-xs font-bold rounded-full">
-                                                    {{ $consumption->created_at->diffForHumans() }}
-                                                </span>
-                                                <form action="{{ route('water-consumptions.destroy', $consumption) }}" method="POST" onsubmit="return confirm('Deseja remover este registro?')">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="text-red-600 hover:text-red-800 font-semibold text-sm transition">
-                                                        ✕
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-
-                                <!-- Pagination -->
-                                @if($consumptions->hasPages())
-                                    <div class="mt-6 pt-6 border-t border-gray-200">
-                                        {{ $consumptions->links() }}
-                                    </div>
+                        <!-- Status -->
+                        <div class="flex items-center justify-between">
+                            <p class="text-blue-100 text-sm font-semibold">
+                                @if(round(($totalToday / $dailyWaterGoal) * 100, 0) >= 100)
+                                    <i class="fas fa-star text-yellow-300 mr-1"></i> Meta atingida! Parabéns
+                                @else
+                                    <span class="text-lg">💧</span> Faltam {{ intval($dailyWaterGoal - $totalToday) }}ml
                                 @endif
-                            @else
-                                <div class="text-center py-12">
-                                    <p class="text-5xl mb-4">💧</p>
-                                    <p class="text-gray-500 font-semibold">Nenhum consumo registrado ainda.</p>
-                                    <p class="text-sm text-gray-400 mt-2">Comece a registrar seu consumo para acompanhar seu progresso!</p>
-                                </div>
-                            @endif
+                            </p>
+                            <div class="text-2xl opacity-20">
+                                <i class="fas fa-tint"></i>
+                            </div>
                         </div>
                     </div>
+                </div>
+
+                <!-- Forms Section -->
+                <div class="bg-white border border-gray-200 rounded-2xl p-5 shadow-sm h-fit">
+                    <h3 class="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <i class="fas fa-plus-circle text-blue-600"></i> Registrar Consumo
+                    </h3>
+                    <form action="{{ route('water-consumptions.store') }}" method="POST" class="space-y-3">
+                        @csrf
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
+                                Quantidade (ml)
+                            </label>
+                            <input
+                                type="number"
+                                name="amount_ml"
+                                placeholder="500"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                required
+                                min="1"
+                                max="10000"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
+                                Data
+                            </label>
+                            <input
+                                type="date"
+                                name="consumption_date"
+                                value="{{ today()->format('Y-m-d') }}"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                                required
+                            />
+                        </div>
+                        <button
+                            type="submit"
+                            class="w-full px-4 py-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-xl font-bold hover:shadow-lg hover:shadow-blue-200 transition-all duration-300 flex items-center justify-center gap-2"
+                        >
+                            <i class="fas fa-check-circle"></i> Adicionar
+                        </button>
+                    </form>
                 </div>
             </div>
 
-            <!-- Achievements Section -->
-            <div class="mt-8 bg-gradient-to-r from-amber-50 to-orange-50 rounded-2xl shadow-lg p-8 border border-amber-200">
-                <h3 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
-                    <span>🏆</span> Seus Conquistas
+            <!-- 7-Day Chart -->
+            <div class="bg-white border border-gray-200 rounded-2xl p-6 mb-6 shadow-sm">
+                <h3 class="font-bold text-gray-900 mb-6 flex items-center gap-2">
+                    <i class="fas fa-chart-bar text-blue-600"></i> Últimos 7 Dias
                 </h3>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <div class="flex items-center gap-4 p-4 bg-white rounded-lg border border-amber-200">
-                        <span class="text-4xl">🎯</span>
-                        <div>
-                            <p class="font-bold text-gray-900">Meta Atingida</p>
-                            <p class="text-xs text-gray-600">Beba 2.5L de água</p>
+                <div class="grid grid-cols-7 gap-2">
+                    @foreach($sevenDaysData as $day)
+                        <div class="flex flex-col items-center group">
+                            <p class="text-xs font-bold text-gray-600 mb-1">{{ substr($day['day'], 0, 3) }}</p>
+                            <p class="text-xs text-gray-500 mb-2">{{ $day['shortDay'] }}</p>
+                            <div class="relative h-24 bg-gray-100 rounded-xl flex items-end justify-center p-2 w-full border border-gray-200 hover:border-cyan-300 transition-all">
+                                @php
+                                    $percentage = $dailyWaterGoal > 0 ? min(($day['amount_ml'] / $dailyWaterGoal) * 100, 100) : 0;
+                                @endphp
+                                <div
+                                    class="w-full rounded-lg transition-all duration-500 bg-gradient-to-t from-blue-500 to-cyan-400 shadow-lg shadow-blue-200/50 group-hover:shadow-xl"
+                                    style="height: {{ $percentage }}%; min-height: 2px;"
+                                ></div>
+                            </div>
+                            <p class="text-xs font-bold text-gray-900 mt-2">{{ number_format($day['amount_ml'] / 1000, 1, ',', '.') }}L</p>
                         </div>
-                    </div>
-                    <div class="flex items-center gap-4 p-4 bg-white rounded-lg border border-amber-200">
-                        <span class="text-4xl">🔥</span>
-                        <div>
-                            <p class="font-bold text-gray-900">Sequência</p>
-                            <p class="text-xs text-gray-600">7 dias seguidos</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-4 p-4 bg-white rounded-lg border border-amber-200">
-                        <span class="text-4xl">⭐</span>
-                        <div>
-                            <p class="font-bold text-gray-900">Consistência</p>
-                            <p class="text-xs text-gray-600">90%+ de meta</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-4 p-4 bg-white rounded-lg border border-amber-200">
-                        <span class="text-4xl">💎</span>
-                        <div>
-                            <p class="font-bold text-gray-900">Super Hidratado</p>
-                            <p class="text-xs text-gray-600">+3L em um dia</p>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
+            </div>
+
+            <!-- History Section -->
+            <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+                <div class="px-6 py-5 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-transparent">
+                    <h3 class="font-bold text-gray-900 flex items-center gap-2">
+                        <i class="fas fa-history text-blue-600"></i> Histórico ({{ $consumptions->total() }})
+                    </h3>
+                </div>
+
+                @if($consumptions->count() > 0)
+                    <div class="divide-y divide-gray-100">
+                        @foreach($consumptions as $consumption)
+                            <div class="px-6 py-4 flex items-center justify-between hover:bg-gradient-to-r hover:from-blue-50 hover:to-transparent transition-all duration-300 group">
+                                <div class="flex items-center gap-4 flex-1">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-xl flex items-center justify-center flex-shrink-0 group-hover:shadow-md transition-shadow">
+                                        <i class="fas fa-droplet text-lg text-cyan-600"></i>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm md:text-base font-bold text-gray-900">{{ $consumption->amount_ml }} ml</p>
+                                        <p class="text-xs text-gray-500 flex items-center gap-2 mt-0.5">
+                                            <i class="fas fa-calendar-alt"></i>
+                                            {{ $consumption->consumption_date->format('d/m/Y') }}
+                                            <span class="text-gray-400">•</span>
+                                            {{ $consumption->created_at->locale('pt_BR')->diffForHumans() }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <x-delete-modal
+                                    :action="route('water-consumptions.destroy', $consumption)"
+                                    title="Deletar Registro"
+                                    message="Tem certeza que deseja deletar este consumo de água?"
+                                    button-text="Deletar"
+                                    class="ml-4 p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"
+                                >
+                                    <i class="fas fa-trash-alt text-sm"></i>
+                                </x-delete-modal>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <!-- Pagination -->
+                    @if($consumptions->hasPages())
+                        <div class="px-6 py-6 border-t border-gray-200 bg-gray-50">
+                            {{ $consumptions->links() }}
+                        </div>
+                    @endif
+                @else
+                    <div class="px-6 py-16 text-center">
+                        <div class="w-16 h-16 bg-gradient-to-br from-gray-100 to-gray-50 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm">
+                            <i class="fas fa-droplet text-3xl text-gray-300"></i>
+                        </div>
+                        <p class="text-gray-600 font-semibold mb-1">Nenhum consumo registrado</p>
+                        <p class="text-sm text-gray-500">Comece a registrar acima para acompanhar seu progresso 💧</p>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

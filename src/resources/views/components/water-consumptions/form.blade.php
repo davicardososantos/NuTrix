@@ -1,38 +1,54 @@
 @props(['consumption' => null])
 
-<div class="bg-white rounded-lg shadow p-6">
-    <h3 class="text-lg font-semibold text-gray-900 mb-4">
-        {{ $consumption ? 'Editar Consumo' : 'Registrar Novo Consumo' }}
-    </h3>
+<div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden">
+    <!-- Header -->
+    <div class="px-6 md:px-8 py-6 border-b border-gray-200 bg-gradient-to-r from-gray-50 to-transparent">
+        <h3 class="text-xl font-bold text-gray-900 flex items-center gap-3">
+            <i class="fas {{ $consumption ? 'fa-edit' : 'fa-plus-circle' }} text-blue-600 text-2xl"></i>
+            {{ $consumption ? 'Editar Consumo' : 'Registrar Novo Consumo' }}
+        </h3>
+    </div>
 
+    <!-- Form -->
     <form action="{{ $consumption ? route('water-consumptions.update', $consumption) : route('water-consumptions.store') }}" 
-          method="POST" class="space-y-4">
+          method="POST" class="p-6 md:p-8 space-y-6">
         @csrf
         @if($consumption)
             @method('PUT')
         @endif
 
-        <div>
-            <x-input-label for="amount_ml" :value="__('Quantidade (ml')" />
-            <x-text-input 
-                id="amount_ml"
-                class="block mt-1 w-full"
-                type="number"
-                name="amount_ml"
-                :value="old('amount_ml', $consumption?->amount_ml)"
-                required
-                autofocus
-                min="1"
-                max="10000"
-                placeholder="500" />
+        <!-- Amount Input -->
+        <div class="group">
+            <div class="flex items-center gap-2 mb-3">
+                <i class="fas fa-droplet text-cyan-600"></i>
+                <x-input-label for="amount_ml" value="Quantidade (ml)" class="font-bold text-gray-900" />
+            </div>
+            <div class="relative">
+                <x-text-input 
+                    id="amount_ml"
+                    class="block w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    type="number"
+                    name="amount_ml"
+                    :value="old('amount_ml', $consumption?->amount_ml)"
+                    required
+                    autofocus
+                    min="1"
+                    max="10000"
+                    placeholder="500" />
+                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 font-semibold pointer-events-none">ml</span>
+            </div>
             <x-input-error :messages="$errors->get('amount_ml')" class="mt-2" />
         </div>
 
-        <div>
-            <x-input-label for="consumption_date" :value="__('Data do Consumo')" />
+        <!-- Date Input -->
+        <div class="group">
+            <div class="flex items-center gap-2 mb-3">
+                <i class="fas fa-calendar text-purple-600"></i>
+                <x-input-label for="consumption_date" value="Data do Consumo" class="font-bold text-gray-900" />
+            </div>
             <x-text-input 
                 id="consumption_date"
-                class="block mt-1 w-full"
+                class="block w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 type="date"
                 name="consumption_date"
                 :value="old('consumption_date',$consumption?->consumption_date?->format('Y-m-d') ?? today()->format('Y-m-d'))"
@@ -41,13 +57,19 @@
             <x-input-error :messages="$errors->get('consumption_date')" class="mt-2" />
         </div>
 
-        <div class="flex gap-3 pt-2">
-            <x-primary-button>
-                {{ $consumption ? __('Atualizar') : __('Registrar') }}
+        <!-- Divider -->
+        <div class="border-t border-gray-200 pt-6"></div>
+
+        <!-- Buttons -->
+        <div class="flex gap-3">
+            <x-primary-button class="flex-1 justify-center gap-2 px-6 py-3 text-base font-bold bg-gradient-to-r from-blue-600 to-cyan-600 hover:shadow-lg hover:shadow-blue-200 transition-all duration-300">
+                <i class="fas {{ $consumption ? 'fa-check-circle' : 'fa-plus-circle' }}"></i>
+                {{ $consumption ? 'Atualizar' : 'Registrar' }}
             </x-primary-button>
             
-            <a href="{{ route('water-consumptions.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                {{ __('Cancelar') }}
+            <a href="{{ route('water-consumptions.index') }}" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gray-200 text-gray-900 font-bold rounded-xl hover:bg-gray-300 transition-all duration-300 text-base">
+                <i class="fas fa-times"></i>
+                Cancelar
             </a>
         </div>
     </form>

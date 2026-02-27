@@ -1,141 +1,184 @@
-<nav x-data="{ open: false }" class="bg-white shadow-md border-b border-gray-100">
-    <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
-                <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-amber-700" />
-                    </a>
-                </div>
+<nav x-data="{ mobileMenuOpen: false }" class="relative z-50">
+    @php
+        $activeRole = session('active_role');
+        $hasPatient = Auth::user()->hasRole('patient');
+        $hasNutritionist = Auth::user()->hasRole('nutritionist');
+        $showPatient = $hasPatient && (!$hasNutritionist || $activeRole === 'patient');
+        $showNutritionist = $hasNutritionist && (!$hasPatient || $activeRole === 'nutritionist');
+    @endphp
 
-                <!-- Navigation Links -->
-                <div class="hidden space-x-1 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" class="hover:text-amber-600">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-                    
-                    @if(Auth::user()->hasRole('patient'))
-                        <x-nav-link :href="route('water-consumptions.index')" :active="request()->routeIs('water-consumptions.*')" class="hover:text-blue-600">
-                            {{ __('💧 Água') }}
-                        </x-nav-link>
-                    @endif
+    <!-- Mobile Top Header -->
+    <div class="md:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-100 shadow-sm px-4 py-3 z-40">
+        <div class="flex items-center justify-between">
+            <!-- Logo -->
+            <a href="{{ route('dashboard') }}" class="shrink-0 flex items-center gap-2">
+                <img src="/logo/icone.png" alt="NuTrix" class="h-8 w-8 object-contain" />
+                <span class="font-black text-base bg-gradient-to-r from-amber-700 to-green-700 bg-clip-text text-transparent">NuTrix</span>
+            </a>
 
-                    @if(Auth::user()->hasRole('nutritionist'))
-                        <x-nav-link :href="route('patients.index')" :active="request()->routeIs('patients.*')" class="hover:text-green-600">
-                            {{ __('👥 Pacientes') }}
-                        </x-nav-link>
-                    @endif
-                </div>
-            </div>
-
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button class="flex items-center gap-3 px-4 py-2 text-sm font-medium text-gray-700 bg-gray-50 hover:bg-gray-100 rounded-lg transition duration-150 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-500">
-                            <div class="flex flex-col items-start">
-                                <span class="text-sm font-semibold">{{ Auth::user()->name }}</span>
-                                @if(Auth::user()->hasRole('nutritionist'))
-                                    <span class="text-xs font-medium text-amber-600">Nutricionista</span>
-                                @elseif(Auth::user()->hasRole('patient'))
-                                    <span class="text-xs font-medium text-blue-600">Paciente</span>
-                                @endif
-                            </div>
-
-                            <div class="ms-auto">
-                                <svg class="fill-current h-4 w-4 text-gray-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
-                        </button>
-                    </x-slot>
-
-                    <x-slot name="content">
-                        <div class="px-4 py-3 border-b border-gray-100">
-                            <p class="text-xs text-gray-500 uppercase tracking-widest font-semibold">Conta</p>
-                        </div>
-                        <x-dropdown-link :href="route('profile.edit')">
-                            ⚙️ {{ __('Configurações') }}
-                        </x-dropdown-link>
-
-                        <!-- Authentication -->
-                        <div class="border-t border-gray-100">
-                            <form method="POST" action="{{ route('logout') }}">
-                                @csrf
-
-                                <x-dropdown-link :href="route('logout')"
-                                        onclick="event.preventDefault();
-                                                    this.closest('form').submit();">
-                                    🚪 {{ __('Sair') }}
-                                </x-dropdown-link>
-                            </form>
-                        </div>
-                    </x-slot>
-                </x-dropdown>
-            </div>
-
-            <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
+            <!-- Mobile Menu Button -->
+            <button @click="mobileMenuOpen = !mobileMenuOpen" class="flex flex-col gap-1.5 p-2 rounded-lg hover:bg-gray-100 transition-colors">
+                <span class="w-5 h-0.5 bg-gray-900 transition-all" :class="mobileMenuOpen ? 'rotate-45 translate-y-2' : ''"></span>
+                <span class="w-5 h-0.5 bg-gray-900 transition-all" :class="mobileMenuOpen ? 'opacity-0' : ''"></span>
+                <span class="w-5 h-0.5 bg-gray-900 transition-all" :class="mobileMenuOpen ? '-rotate-45 -translate-y-2' : ''"></span>
+            </button>
         </div>
     </div>
 
-    <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden border-t border-gray-100">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-            
-            @if(Auth::user()->hasRole('patient'))
-                <x-responsive-nav-link :href="route('water-consumptions.index')" :active="request()->routeIs('water-consumptions.*')">
-                    {{ __('💧 Água') }}
-                </x-responsive-nav-link>
+    <!-- Mobile Menu Overlay & Drawer -->
+    <div x-show="mobileMenuOpen" x-transition:enter="transition ease-out duration-300" x-transition:leave="transition ease-in duration-200" @click.outside="mobileMenuOpen = false" class="fixed inset-0 bg-black/30 md:hidden" style="display: none;"></div>
+
+    <div x-show="mobileMenuOpen" x-transition:enter="transition ease-out duration-300 transform" x-transition:enter-start="-translate-y-full" x-transition:enter-end="translate-y-0" x-transition:leave="transition ease-in duration-200 transform" x-transition:leave-start="translate-y-0" x-transition:leave-end="-translate-y-full" class="fixed top-14 left-0 right-0 bg-white rounded-b-3xl shadow-2xl md:hidden max-h-[90vh] overflow-y-auto z-40" style="display: none;">
+        <div class="px-6 py-6 pb-8">
+            <!-- Badge: Nutricionista (Top) -->
+            @if($showNutritionist)
+                <div class="mb-6 px-4 py-3 bg-gradient-to-r from-emerald-50 to-green-50 border border-green-200 rounded-xl">
+                    <p class="text-sm font-semibold text-green-700 flex items-center gap-2">
+                        <i class="fas fa-stethoscope"></i>
+                        Área do Nutricionista
+                    </p>
+                </div>
             @endif
 
-            @if(Auth::user()->hasRole('nutritionist'))
-                <x-responsive-nav-link :href="route('patients.index')" :active="request()->routeIs('patients.*')">
-                    {{ __('👥 Pacientes') }}
-                </x-responsive-nav-link>
-            @endif
-        </div>
+            <!-- Navigation Items -->
+            <div class="space-y-3">
+                <!-- Dashboard -->
+                <a href="{{ route('dashboard') }}" @click="mobileMenuOpen = false" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('dashboard') ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50' }}">
+                    <i class="fas fa-home text-xl w-6"></i>
+                    <span class="font-semibold">Início</span>
+                </a>
 
-        <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-100">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                @if(Auth::user()->hasRole('nutritionist'))
-                    <div class="text-sm text-amber-600 font-medium mt-1">Nutricionista</div>
-                @elseif(Auth::user()->hasRole('patient'))
-                    <div class="text-sm text-blue-600 font-medium mt-1">Paciente</div>
+                @if($showPatient)
+                    <!-- Water -->
+                    <a href="{{ route('water-consumptions.index') }}" @click="mobileMenuOpen = false" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('water-consumptions.*') ? 'bg-cyan-50 text-cyan-600' : 'text-gray-700 hover:bg-gray-50' }}">
+                        <i class="fas fa-droplet text-xl w-6"></i>
+                        <span class="font-semibold">Hidratação</span>
+                    </a>
                 @endif
-                <div class="font-medium text-sm text-gray-500 mt-2">{{ Auth::user()->email }}</div>
-            </div>
 
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    ⚙️ {{ __('Configurações') }}
-                </x-responsive-nav-link>
+                @if($showNutritionist)
+                    <!-- Patients -->
+                    <a href="{{ route('patients.index') }}" @click="mobileMenuOpen = false" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('patients.*') ? 'bg-green-50 text-green-600' : 'text-gray-700 hover:bg-gray-50' }}">
+                        <i class="fas fa-users text-xl w-6"></i>
+                        <span class="font-semibold">Pacientes</span>
+                    </a>
+                @endif
 
-                <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
+                <!-- Divider -->
+                <div class="border-t border-gray-200 my-4"></div>
+
+                <!-- Settings -->
+                <a href="{{ route('profile.edit') }}" @click="mobileMenuOpen = false" class="flex items-center gap-4 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 transition-all">
+                    <i class="fas fa-gear text-xl w-6"></i>
+                    <span class="font-semibold">Configurações</span>
+                </a>
+
+                <!-- Logout -->
+                <form method="POST" action="{{ route('logout') }}" class="block">
                     @csrf
-
-                    <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        🚪 {{ __('Sair') }}
-                    </x-responsive-nav-link>
+                    <button type="submit" class="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-red-600 hover:bg-red-50 transition-all font-semibold text-left">
+                        <i class="fas fa-sign-out-alt text-xl w-6"></i>
+                        Sair
+                    </button>
                 </form>
             </div>
         </div>
     </div>
+
+    <!-- Desktop Top Navigation -->
+    <div class="hidden md:block bg-white border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Left: Logo & Nav -->
+                <div class="flex items-center gap-16">
+                    <!-- Logo -->
+                    <a href="{{ route('dashboard') }}" class="group shrink-0 flex items-center gap-2">
+                        <img src="/logo/icone.png" alt="NuTrix" class="h-9 w-9 object-contain" />
+                        <span class="text-lg font-black bg-gradient-to-r from-amber-700 to-green-700 bg-clip-text text-transparent">NuTrix</span>
+                    </a>
+
+                    <!-- Navigation Links -->
+                    <div class="flex items-center gap-12">
+                        <!-- Dashboard -->
+                        <a href="{{ route('dashboard') }}" class="relative group">
+                            <span class="text-gray-700 font-medium transition-colors duration-300 {{ request()->routeIs('dashboard') ? 'text-gray-900' : 'hover:text-gray-900' }}">
+                                Início
+                            </span>
+                            <span class="absolute -bottom-2 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-cyan-600 transition-all duration-300 {{ request()->routeIs('dashboard') ? 'w-full' : 'group-hover:w-full' }}"></span>
+                        </a>
+
+                        @if($showPatient)
+                            <!-- Water -->
+                            <a href="{{ route('water-consumptions.index') }}" class="relative group">
+                                <span class="text-gray-700 font-medium transition-colors duration-300 {{ request()->routeIs('water-consumptions.*') ? 'text-gray-900' : 'hover:text-gray-900' }}">
+                                    Hidratação
+                                </span>
+                                <span class="absolute -bottom-2 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-600 to-blue-600 transition-all duration-300 {{ request()->routeIs('water-consumptions.*') ? 'w-full' : 'group-hover:w-full' }}"></span>
+                            </a>
+                        @endif
+
+                        @if($showNutritionist)
+                            <!-- Patients -->
+                            <a href="{{ route('patients.index') }}" class="relative group">
+                                <span class="text-gray-700 font-medium transition-colors duration-300 {{ request()->routeIs('patients.*') ? 'text-gray-900' : 'hover:text-gray-900' }}">
+                                    Pacientes
+                                </span>
+                                <span class="absolute -bottom-2 left-0 w-0 h-0.5 bg-gradient-to-r from-green-600 to-emerald-600 transition-all duration-300 {{ request()->routeIs('patients.*') ? 'w-full' : 'group-hover:w-full' }}"></span>
+                            </a>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Right: User Menu -->
+                <div class="flex items-center gap-8">
+                    <!-- User Dropdown -->
+                    <div x-data="{ open: false }" class="relative">
+                        <button @click="open = !open" class="flex items-center gap-3 group">
+                            <div class="text-right">
+                                <p class="text-sm font-semibold text-gray-900">{{ Auth::user()->name }}</p>
+                                <p class="text-xs text-gray-500 flex items-center gap-1">
+                                    @if($showNutritionist)
+                                        <i class="fas fa-stethoscope"></i>
+                                    @endif
+                                    {{ $activeRole === 'patient' ? 'Paciente' : 'Nutricionista' }}
+                                </p>
+                            </div>
+                            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white font-semibold text-sm">
+                                {{ substr(Auth::user()->name, 0, 1) }}
+                            </div>
+                            <i class="fas fa-chevron-down text-xs text-gray-500 transition-transform duration-300" :class="open ? 'rotate-180 text-gray-900' : ''" style="width: 14px;"></i>
+                        </button>
+
+                        <div x-show="open" x-transition @click.outside="open = false" class="absolute right-0 mt-4 w-56 bg-white border border-gray-100 rounded-xl shadow-xl shadow-black/10 z-50 overflow-hidden">
+                            <!-- User Info -->
+                            <div class="px-6 py-4 border-b border-gray-100 bg-gray-50">
+                                <p class="text-sm font-semibold text-gray-900">{{ Auth::user()->name }}</p>
+                                <p class="text-xs text-gray-500 mt-1">{{ Auth::user()->email }}</p>
+                            </div>
+
+                            <!-- Menu Items -->
+                            <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 text-sm font-medium">
+                                <i class="fas fa-sliders-h w-4"></i>
+                                Configurações
+                            </a>
+
+                            <div class="border-t border-gray-100"></div>
+
+                            <!-- Logout -->
+                            <form method="POST" action="{{ route('logout') }}" class="block">
+                                @csrf
+                                <button type="submit" class="w-full text-left flex items-center gap-3 px-6 py-3 text-red-600 hover:bg-red-50 transition-colors duration-200 text-sm font-medium">
+                                    <i class="fas fa-sign-out-alt w-4"></i>
+                                    Sair
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Top Spacer -->
+    <div class="h-14 md:hidden"></div>
 </nav>
