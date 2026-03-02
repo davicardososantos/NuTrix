@@ -54,6 +54,12 @@
                         <i class="fas fa-droplet text-xl w-6"></i>
                         <span class="font-semibold">Hidratação</span>
                     </a>
+
+                    <!-- Weight -->
+                    <a href="{{ route('weights.index') }}" @click="mobileMenuOpen = false" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('weights.*') ? 'bg-emerald-50 text-emerald-600' : 'text-gray-700 hover:bg-gray-50' }}">
+                        <i class="fas fa-scale-balanced text-xl w-6"></i>
+                        <span class="font-semibold">Peso</span>
+                    </a>
                 @endif
 
                 @if($showNutritionist)
@@ -114,6 +120,14 @@
                                     Hidratação
                                 </span>
                                 <span class="absolute -bottom-2 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-600 to-blue-600 transition-all duration-300 {{ request()->routeIs('water-consumptions.*') ? 'w-full' : 'group-hover:w-full' }}"></span>
+                            </a>
+
+                            <!-- Weight -->
+                            <a href="{{ route('weights.index') }}" class="relative group">
+                                <span class="text-gray-700 font-medium transition-colors duration-300 {{ request()->routeIs('weights.*') ? 'text-gray-900' : 'hover:text-gray-900' }}">
+                                    Peso
+                                </span>
+                                <span class="absolute -bottom-2 left-0 w-0 h-0.5 bg-gradient-to-r from-emerald-600 to-green-600 transition-all duration-300 {{ request()->routeIs('weights.*') ? 'w-full' : 'group-hover:w-full' }}"></span>
                             </a>
                         @endif
 

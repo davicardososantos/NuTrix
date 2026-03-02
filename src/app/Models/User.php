@@ -58,6 +58,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Get all weight entries for the user.
+     */
+    public function weightEntries(): HasMany
+    {
+        return $this->hasMany(WeightEntry::class);
+    }
+
+    /**
      * Roles relationship (many-to-many).
      */
     public function roles(): BelongsToMany

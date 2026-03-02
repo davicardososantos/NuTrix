@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WaterConsumptionController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\WeightController;
+use App\Http\Controllers\WeightEntryController;
 use App\Http\Controllers\PlatformController;
 use App\Http\Controllers\Auth\PatientRegistrationController;
 use Illuminate\Support\Facades\Route;
@@ -40,12 +41,21 @@ Route::middleware('auth')->group(function () {
         Route::get('/water-consumptions/{waterConsumption}/edit', [WaterConsumptionController::class, 'edit'])->name('water-consumptions.edit');
         Route::put('/water-consumptions/{waterConsumption}', [WaterConsumptionController::class, 'update'])->name('water-consumptions.update');
         Route::delete('/water-consumptions/{waterConsumption}', [WaterConsumptionController::class, 'destroy'])->name('water-consumptions.destroy');
+
+        // Weight tracking routes
+        Route::get('/weights', [WeightEntryController::class, 'index'])->name('weights.index');
+        Route::post('/weights', [WeightEntryController::class, 'store'])->name('weights.store');
+        Route::get('/weights/{weightEntry}/edit', [WeightEntryController::class, 'edit'])->name('weights.edit');
+        Route::put('/weights/{weightEntry}', [WeightEntryController::class, 'update'])->name('weights.update');
+        Route::delete('/weights/{weightEntry}', [WeightEntryController::class, 'destroy'])->name('weights.destroy');
     });
 
     // Patient management routes (only for nutritionists)
     Route::middleware('role:nutritionist')->group(function () {
         Route::resource('patients', PatientController::class);
         Route::get('/patients/{patient}/code', [PatientController::class, 'showCode'])->name('patients.show-code');
+        Route::get('/patients/{patient}/weights', [PatientController::class, 'showWeights'])->name('patients.weights');
+        Route::get('/patients/{patient}/monitoring', [PatientController::class, 'showMonitoring'])->name('patients.monitoring');
     });
 });
 

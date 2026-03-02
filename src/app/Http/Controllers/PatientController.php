@@ -171,4 +171,101 @@ class PatientController extends Controller
 
         return $code;
     }
+
+    /**
+     * Display patient's weight tracking data (for nutritionist).
+     */
+    public function showWeights(Patient $patient)
+    {
+        // Verify ownership
+        $nutritionist = auth()->user()->nutritionist;
+        if (!$nutritionist || $patient->nutritionist_id !== $nutritionist->id) {
+            abort(403, 'Você não tem permissão para visualizar este paciente.');
+        }
+
+        $user = $patient->user;
+
+        // Get paginated entries
+        $entries = $user->weightEntries()
+            ->orderByDesc('measured_date')
+            ->paginate(10);
+
+        // Get latest and previous entries for change calculation
+        $latestEntry = $user->weightEntries()->orderByDesc('measured_date')->first();
+        $previousEntry = $user->weightEntries()
+            ->where('measured_date', '<', $latestEntry?->measured_date)
+            ->orderByDesc('measured_date')
+            ->first();
+
+        $weightChange = null;
+        if ($latestEntry && $previousEntry) {
+            $weightChange = $previousEntry->weight_kg - $latestEntry->weight_kg;
+        }
+
+        // Get chart entries (last 10)
+        $chartEntries = $user->weightEntries()
+            ->orderByDesc('measured_date')
+            ->limit(10)
+            ->get()
+            ->sortBy('measured_date')
+            ->values();
+
+        return view('patients.weights', [
+            'patient' => $patient,
+            'entries' => $entries,
+            'latestEntry' => $latestEntry,
+            'weightChange' => $weightChange,
+            'chartEntries' => $chartEntries,
+        ]);
+    }
+
+    /**
+     * Display patient's monitoring dashboard (weight + water).
+     */
+    public function showMonitoring(Patient $patient)
+    {
+        // Verify ownership
+        $nutritionist = auth()->user()->nutritionist;
+        if (!$nutritionist || $patient->nutritionist_id !== $nutritionist->id) {
+            abort(403, 'Você não tem permissão para visualizar este paciente.');
+        }
+
+        $user = $patient->user;
+
+        if (!$user) {
+            return view('patients.monitoring', [
+                'patient' => $patient,
+                'weightChartEntries' => collect([]),
+                'latestWeight' => null,
+                'waterChartEntries' => collect([]),
+                'latestWater' => null,
+            ]);
+        }
+
+        // Weight data
+        $weightChartEntries = $user->weightEntries()
+            ->orderByDesc('measured_date')
+            ->limit(10)
+            ->get()
+            ->sortBy('measured_date')
+            ->values();
+
+        $latestWeight = $user->weightEntries()->orderByDesc('measured_date')->first();
+
+        // Water data
+        $waterChartEntries = $user->waterConsumptions()
+            ->where('consumption_date', '>=', now()->subDays(30))
+            ->orderBy('consumption_date')
+            ->get();
+
+        $latestWater = $user->waterConsumptions()->orderByDesc('consumption_date')->first();
+
+        return view('patients.monitoring', [
+            'patient' => $patient,
+            'weightChartEntries' => $weightChartEntries,
+            'latestWeight' => $latestWeight,
+            'waterChartEntries' => $waterChartEntries,
+            'latestWater' => $latestWater,
+        ]);
+    }
 }
