@@ -27,7 +27,7 @@ class EnsureActiveRole
             $activeRole = $request->session()->get('active_role');
 
             if (!$activeRole || $activeRole !== $role) {
-                return redirect()->route('platform.select')
+                return redirect()->route('portal.selecionar')
                     ->with('message', 'Escolha a plataforma que deseja acessar.');
             }
         }

@@ -33,7 +33,7 @@ class RegisteredUserController extends Controller
     {
         // Check if user already exists
         $existingUser = User::where('email', $request->email)->first();
-        
+
         // If user exists and is already a nutritionist, reject registration
         if ($existingUser && $existingUser->hasRole('nutritionist')) {
             return redirect()->back()->with('error', 'Este email já está registrado como nutricionista.');
@@ -100,6 +100,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false));
+        return redirect(route('painel', absolute: false));
     }
 }

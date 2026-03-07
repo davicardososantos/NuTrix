@@ -13,7 +13,7 @@
                             <p class="text-xs md:text-sm text-gray-500 mt-0.5">Gerenciar e acompanhar dados dos pacientes</p>
                         </div>
                     </div>
-                    <a href="{{ route('patients.create') }}" class="px-4 md:px-6 py-3 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold hover:shadow-lg hover:shadow-green-200 transition-all duration-300 flex items-center gap-2 whitespace-nowrap">
+                    <a href="{{ route('pacientes.create') }}" class="px-4 md:px-6 py-3 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold hover:shadow-lg hover:shadow-green-200 transition-all duration-300 flex items-center gap-2 whitespace-nowrap">
                         <i class="fas fa-plus-circle"></i>
                         <span class="hidden md:inline">Novo Paciente</span>
                         <span class="md:hidden">Novo</span>
@@ -93,12 +93,12 @@
 
                                 <!-- Actions -->
                                 <div class="flex gap-2 md:gap-3">
-                                    <a href="{{ route('patients.edit', $patient) }}" class="flex-1 md:flex-none px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl font-bold text-sm hover:shadow-lg hover:shadow-green-200 transition-all duration-200 flex items-center justify-center gap-2">
+                                    <a href="{{ route('pacientes.edit', $patient) }}" class="flex-1 md:flex-none px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl font-bold text-sm hover:shadow-lg hover:shadow-green-200 transition-all duration-200 flex items-center justify-center gap-2">
                                         <i class="fas fa-id-card"></i>
                                         <span class="hidden sm:inline">Ver Perfil</span>
                                         <span class="sm:hidden">Perfil</span>
                                     </a>
-                                    <form action="{{ route('patients.destroy', $patient) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja deletar este paciente?')" class="flex-1 md:flex-none">
+                                    <form action="{{ route('pacientes.destroy', $patient) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja deletar este paciente?')" class="flex-1 md:flex-none">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="w-full px-4 py-2 bg-red-100 text-red-700 rounded-xl font-bold text-sm hover:bg-red-200 hover:shadow-md transition-all duration-200 flex items-center justify-center gap-2">
@@ -137,7 +137,7 @@
                     </div>
                     <p class="text-gray-600 font-semibold mb-2 text-lg">Nenhum paciente cadastrado ainda</p>
                     <p class="text-gray-500 text-sm mb-8">Comece adicionando seu primeiro paciente para iniciar o acompanhamento.</p>
-                    <a href="{{ route('patients.create') }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold hover:shadow-lg hover:shadow-green-200 transition-all duration-300">
+                    <a href="{{ route('pacientes.create') }}" class="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold hover:shadow-lg hover:shadow-green-200 transition-all duration-300">
                         <i class="fas fa-plus-circle"></i>
                         Cadastrar Primeiro Paciente
                     </a>

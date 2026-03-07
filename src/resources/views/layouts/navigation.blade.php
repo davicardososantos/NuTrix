@@ -11,7 +11,7 @@
     <div class="md:hidden fixed top-0 left-0 right-0 bg-white border-b border-gray-100 shadow-sm px-4 py-3 z-40">
         <div class="flex items-center justify-between">
             <!-- Logo -->
-            <a href="{{ route('dashboard') }}" class="shrink-0 flex items-center gap-2">
+            <a href="{{ route('painel') }}" class="shrink-0 flex items-center gap-2">
                 <img src="/logo/icone.png" alt="NuTrix" class="h-8 w-8 object-contain" />
                 <span class="font-black text-base bg-gradient-to-r from-amber-700 to-green-700 bg-clip-text text-transparent">NuTrix</span>
             </a>
@@ -43,20 +43,20 @@
             <!-- Navigation Items -->
             <div class="space-y-3">
                 <!-- Dashboard -->
-                <a href="{{ route('dashboard') }}" @click="mobileMenuOpen = false" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('dashboard') ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50' }}">
+                <a href="{{ route('painel') }}" @click="mobileMenuOpen = false" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('painel') ? 'bg-blue-50 text-blue-600' : 'text-gray-700 hover:bg-gray-50' }}">
                     <i class="fas fa-home text-xl w-6"></i>
                     <span class="font-semibold">Início</span>
                 </a>
 
                 @if($showPatient)
                     <!-- Water -->
-                    <a href="{{ route('water-consumptions.index') }}" @click="mobileMenuOpen = false" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('water-consumptions.*') ? 'bg-cyan-50 text-cyan-600' : 'text-gray-700 hover:bg-gray-50' }}">
+                    <a href="{{ route('consumos-agua.index') }}" @click="mobileMenuOpen = false" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('consumos-agua.*') ? 'bg-cyan-50 text-cyan-600' : 'text-gray-700 hover:bg-gray-50' }}">
                         <i class="fas fa-droplet text-xl w-6"></i>
                         <span class="font-semibold">Hidratação</span>
                     </a>
 
                     <!-- Weight -->
-                    <a href="{{ route('weights.index') }}" @click="mobileMenuOpen = false" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('weights.*') ? 'bg-emerald-50 text-emerald-600' : 'text-gray-700 hover:bg-gray-50' }}">
+                    <a href="{{ route('pesos.index') }}" @click="mobileMenuOpen = false" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('pesos.*') ? 'bg-emerald-50 text-emerald-600' : 'text-gray-700 hover:bg-gray-50' }}">
                         <i class="fas fa-scale-balanced text-xl w-6"></i>
                         <span class="font-semibold">Peso</span>
                     </a>
@@ -64,7 +64,7 @@
 
                 @if($showNutritionist)
                     <!-- Patients -->
-                    <a href="{{ route('patients.index') }}" @click="mobileMenuOpen = false" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('patients.*') ? 'bg-green-50 text-green-600' : 'text-gray-700 hover:bg-gray-50' }}">
+                    <a href="{{ route('pacientes.index') }}" @click="mobileMenuOpen = false" class="flex items-center gap-4 px-4 py-3 rounded-xl transition-all {{ request()->routeIs('pacientes.*') ? 'bg-green-50 text-green-600' : 'text-gray-700 hover:bg-gray-50' }}">
                         <i class="fas fa-users text-xl w-6"></i>
                         <span class="font-semibold">Pacientes</span>
                     </a>
@@ -74,7 +74,7 @@
                 <div class="border-t border-gray-200 my-4"></div>
 
                 <!-- Settings -->
-                <a href="{{ route('profile.edit') }}" @click="mobileMenuOpen = false" class="flex items-center gap-4 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 transition-all">
+                <a href="{{ route('perfil.editar') }}" @click="mobileMenuOpen = false" class="flex items-center gap-4 px-4 py-3 rounded-xl text-gray-700 hover:bg-gray-50 transition-all">
                     <i class="fas fa-gear text-xl w-6"></i>
                     <span class="font-semibold">Configurações</span>
                 </a>
@@ -98,7 +98,7 @@
                 <!-- Left: Logo & Nav -->
                 <div class="flex items-center gap-16">
                     <!-- Logo -->
-                    <a href="{{ route('dashboard') }}" class="group shrink-0 flex items-center gap-2">
+                    <a href="{{ route('painel') }}" class="group shrink-0 flex items-center gap-2">
                         <img src="/logo/icone.png" alt="NuTrix" class="h-9 w-9 object-contain" />
                         <span class="text-lg font-black bg-gradient-to-r from-amber-700 to-green-700 bg-clip-text text-transparent">NuTrix</span>
                     </a>
@@ -106,38 +106,38 @@
                     <!-- Navigation Links -->
                     <div class="flex items-center gap-12">
                         <!-- Dashboard -->
-                        <a href="{{ route('dashboard') }}" class="relative group">
-                            <span class="text-gray-700 font-medium transition-colors duration-300 {{ request()->routeIs('dashboard') ? 'text-gray-900' : 'hover:text-gray-900' }}">
+                        <a href="{{ route('painel') }}" class="relative group">
+                            <span class="text-gray-700 font-medium transition-colors duration-300 {{ request()->routeIs('painel') ? 'text-gray-900' : 'hover:text-gray-900' }}">
                                 Início
                             </span>
-                            <span class="absolute -bottom-2 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-cyan-600 transition-all duration-300 {{ request()->routeIs('dashboard') ? 'w-full' : 'group-hover:w-full' }}"></span>
+                            <span class="absolute -bottom-2 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-600 to-cyan-600 transition-all duration-300 {{ request()->routeIs('painel') ? 'w-full' : 'group-hover:w-full' }}"></span>
                         </a>
 
                         @if($showPatient)
                             <!-- Water -->
-                            <a href="{{ route('water-consumptions.index') }}" class="relative group">
-                                <span class="text-gray-700 font-medium transition-colors duration-300 {{ request()->routeIs('water-consumptions.*') ? 'text-gray-900' : 'hover:text-gray-900' }}">
+                            <a href="{{ route('consumos-agua.index') }}" class="relative group">
+                                <span class="text-gray-700 font-medium transition-colors duration-300 {{ request()->routeIs('consumos-agua.*') ? 'text-gray-900' : 'hover:text-gray-900' }}">
                                     Hidratação
                                 </span>
-                                <span class="absolute -bottom-2 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-600 to-blue-600 transition-all duration-300 {{ request()->routeIs('water-consumptions.*') ? 'w-full' : 'group-hover:w-full' }}"></span>
+                                <span class="absolute -bottom-2 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-600 to-blue-600 transition-all duration-300 {{ request()->routeIs('consumos-agua.*') ? 'w-full' : 'group-hover:w-full' }}"></span>
                             </a>
 
                             <!-- Weight -->
-                            <a href="{{ route('weights.index') }}" class="relative group">
-                                <span class="text-gray-700 font-medium transition-colors duration-300 {{ request()->routeIs('weights.*') ? 'text-gray-900' : 'hover:text-gray-900' }}">
+                            <a href="{{ route('pesos.index') }}" class="relative group">
+                                <span class="text-gray-700 font-medium transition-colors duration-300 {{ request()->routeIs('pesos.*') ? 'text-gray-900' : 'hover:text-gray-900' }}">
                                     Peso
                                 </span>
-                                <span class="absolute -bottom-2 left-0 w-0 h-0.5 bg-gradient-to-r from-emerald-600 to-green-600 transition-all duration-300 {{ request()->routeIs('weights.*') ? 'w-full' : 'group-hover:w-full' }}"></span>
+                                <span class="absolute -bottom-2 left-0 w-0 h-0.5 bg-gradient-to-r from-emerald-600 to-green-600 transition-all duration-300 {{ request()->routeIs('pesos.*') ? 'w-full' : 'group-hover:w-full' }}"></span>
                             </a>
                         @endif
 
                         @if($showNutritionist)
                             <!-- Patients -->
-                            <a href="{{ route('patients.index') }}" class="relative group">
-                                <span class="text-gray-700 font-medium transition-colors duration-300 {{ request()->routeIs('patients.*') ? 'text-gray-900' : 'hover:text-gray-900' }}">
+                            <a href="{{ route('pacientes.index') }}" class="relative group">
+                                <span class="text-gray-700 font-medium transition-colors duration-300 {{ request()->routeIs('pacientes.*') ? 'text-gray-900' : 'hover:text-gray-900' }}">
                                     Pacientes
                                 </span>
-                                <span class="absolute -bottom-2 left-0 w-0 h-0.5 bg-gradient-to-r from-green-600 to-emerald-600 transition-all duration-300 {{ request()->routeIs('patients.*') ? 'w-full' : 'group-hover:w-full' }}"></span>
+                                <span class="absolute -bottom-2 left-0 w-0 h-0.5 bg-gradient-to-r from-green-600 to-emerald-600 transition-all duration-300 {{ request()->routeIs('pacientes.*') ? 'w-full' : 'group-hover:w-full' }}"></span>
                             </a>
                         @endif
                     </div>
@@ -171,7 +171,7 @@
                             </div>
 
                             <!-- Menu Items -->
-                            <a href="{{ route('profile.edit') }}" class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 text-sm font-medium">
+                            <a href="{{ route('perfil.editar') }}" class="flex items-center gap-3 px-6 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors duration-200 text-sm font-medium">
                                 <i class="fas fa-sliders-h w-4"></i>
                                 Configurações
                             </a>

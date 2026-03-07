@@ -10,7 +10,7 @@
     </div>
 
     <!-- Form -->
-    <form action="{{ $entry ? route('weights.update', $entry) : route('weights.store') }}"
+    <form action="{{ $entry ? route('pesos.atualizar', $entry) : route('pesos.store') }}"
           method="POST" class="p-6 md:p-8 space-y-6">
         @csrf
         @if($entry)
@@ -68,7 +68,7 @@
                 {{ $entry ? 'Atualizar' : 'Registrar' }}
             </x-primary-button>
 
-            <a href="{{ route('weights.index') }}" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gray-200 text-gray-900 font-bold rounded-xl hover:bg-gray-300 transition-all duration-300 text-base">
+            <a href="{{ route('pesos.index') }}" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gray-200 text-gray-900 font-bold rounded-xl hover:bg-gray-300 transition-all duration-300 text-base">
                 <i class="fas fa-times"></i>
                 Cancelar
             </a>

@@ -3,7 +3,7 @@
         <!-- Back Navigation -->
         <div class="sticky top-14 md:top-16 bg-white border-b border-gray-100 z-30">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                <a href="{{ route('water-consumptions.index') }}" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold transition-colors">
+                <a href="{{ route('consumos-agua.index') }}" class="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 font-semibold transition-colors">
                     <i class="fas fa-chevron-left"></i>
                     <span>Voltar</span>
                 </a>
@@ -77,10 +77,10 @@
 
                         <!-- Delete Button -->
                         <div class="mt-8 pt-6 border-t border-gray-200">
-                            <x-delete-modal 
-                                :action="route('water-consumptions.destroy', $consumption)" 
-                                title="Deletar Registro de Água" 
-                                message="Tem certeza que deseja deletar este consumo de água? Esta ação não pode ser desfeita." 
+                            <x-delete-modal
+                                :action="route('consumos-agua.excluir', $consumption)"
+                                title="Deletar Registro de Água"
+                                message="Tem certeza que deseja deletar este consumo de água? Esta ação não pode ser desfeita."
                                 button-text="Deletar"
                                 class="w-full px-4 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-xl font-bold hover:shadow-lg hover:shadow-red-200 transition-all duration-300 flex items-center justify-center gap-2"
                             >

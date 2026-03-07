@@ -2,21 +2,46 @@
 
 namespace App\Http\Controllers;
 
+use App\Domain\Water\Services\WaterHydrationService;
+use App\Http\Requests\StoreWaterConsumptionRequest;
+use App\Http\Requests\UpdateWaterConsumptionRequest;
 use App\Models\WaterConsumption;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
+/**
+ * WaterConsumptionController
+ *
+ * Responsabilidades:
+ * - Gerenciar requisições HTTP de consumo de água
+ * - Delegar cálculos para WaterHydrationService
+ * - Transformar dados para apresentação
+ *
+ * Design Patterns aplicados:
+ * - Service Layer: Injeta WaterHydrationService no constructor
+ * - Form Request: Validação centralizada em StoreWaterConsumptionRequest/UpdateWaterConsumptionRequest
+ * - Dependency Injection: Services injetados automaticamente pelo Laravel container
+ */
 class WaterConsumptionController extends Controller
 {
+    public function __construct(
+        private readonly WaterHydrationService $waterHydrationService,
+    ) {}
+
     // ===========================================
     // WEB ROUTES - Retornam Views
     // ===========================================
 
     /**
      * Exibir página principal de consumo de água com estatísticas.
+     *
+     * SOLID - Single Responsibility:
+     * - WaterHydrationService calcula meta diária e histórico
+     * - Controller apenas orquestra apresentação
      */
     public function index(Request $request)
     {
@@ -43,7 +68,9 @@ class WaterConsumptionController extends Controller
             ->whereDate('consumption_date', today())
             ->sum('amount_ml');
 
-        $dailyWaterGoal = $this->calculateWaterGoal();
+        // Delegar cálculos para WaterHydrationService
+        $dailyWaterGoalVolume = $this->waterHydrationService->calculateDailyGoal($user->patient);
+        $dailyWaterGoal = $dailyWaterGoalVolume->milliliters();
         $sevenDaysData = $this->getSevenDaysData();
 
         return view('water-consumptions.index', [
@@ -56,6 +83,9 @@ class WaterConsumptionController extends Controller
 
     /**
      * Exibir página de edição de consumo.
+     *
+     * SOLID - Liskov Substitution:
+     * - Política de autorização garante permissões
      */
     public function edit(WaterConsumption $waterConsumption): View
     {
@@ -72,14 +102,14 @@ class WaterConsumptionController extends Controller
 
     /**
      * Registrar um novo consumo de água.
+     *
+     * SOLID - Single Responsibility:
+     * - StoreWaterConsumptionRequest valida dados
+     * - Controller apenas coordena persistência
      */
-    public function store(Request $request)
+    public function store(StoreWaterConsumptionRequest $request)
     {
-        $validated = $request->validate([
-            'amount_ml' => 'required|integer|min:1|max:10000',
-            'consumption_date' => 'required|date|before_or_equal:today',
-        ]);
-
+        $validated = $request->validated();
         $consumption = auth()->user()->waterConsumptions()->create($validated);
 
         // Resposta para API
@@ -92,22 +122,20 @@ class WaterConsumptionController extends Controller
         }
 
         // Resposta para Web
-        return redirect()->route('water-consumptions.index')
+        return redirect()->route('consumos-agua.index')
             ->with('success', 'Consumo de água registrado com sucesso!');
     }
 
     /**
      * Atualizar um consumo de água.
+     *
+     * SOLID - Single Responsibility:
+     * - UpdateWaterConsumptionRequest valida dados e autorização
+     * - Controller apenas coordena atualização
      */
-    public function update(Request $request, WaterConsumption $waterConsumption)
+    public function update(UpdateWaterConsumptionRequest $request, WaterConsumption $waterConsumption)
     {
-        $this->authorize('update', $waterConsumption);
-
-        $validated = $request->validate([
-            'amount_ml' => 'required|integer|min:1|max:10000',
-            'consumption_date' => 'required|date|before_or_equal:today',
-        ]);
-
+        $validated = $request->validated();
         $waterConsumption->update($validated);
 
         // Resposta para API
@@ -120,12 +148,16 @@ class WaterConsumptionController extends Controller
         }
 
         // Resposta para Web
-        return redirect()->route('water-consumptions.index')
+        return redirect()->route('consumos-agua.index')
             ->with('success', 'Consumo atualizado com sucesso!');
     }
 
     /**
      * Deletar um consumo de água.
+     *
+     * SOLID - Single Responsibility:
+     * - Política de autorização garante permissões
+     * - Controller apenas coordena exclusão
      */
     public function destroy(Request $request, WaterConsumption $waterConsumption)
     {
@@ -142,7 +174,7 @@ class WaterConsumptionController extends Controller
         }
 
         // Resposta para Web
-        return redirect()->route('water-consumptions.index')
+        return redirect()->route('consumos-agua.index')
             ->with('success', 'Consumo deletado com sucesso!');
     }
 
@@ -211,49 +243,23 @@ class WaterConsumptionController extends Controller
     }
 
     // ===========================================
-    // MÉTODOS PRIVADOS - Lógica de Negócio
+    // MÉTODOS PRIVADOS - Lógica de Apresentação
     // ===========================================
-
-    /**
-     * Calcular meta diária de água baseado em peso e altura.
-     *
-     * Usa fórmula da OMS: peso (kg) × 35ml
-     * Se não houver peso, estima com IMC de 22 usando a altura.
-     * Valor padrão: 2500ml (2.5L)
-     */
-    private function calculateWaterGoal(): int
-    {
-        $patient = auth()->user()->patient;
-
-        // Usa peso direto se disponível
-        if ($patient && $patient->weight) {
-            return (int) round($patient->weight * 35);
-        }
-
-        // Estimar peso usando altura e IMC médio (22)
-        if ($patient && $patient->height) {
-            $heightCm = $patient->height;
-            $heightM = $heightCm > 3 ? ($heightCm / 100) : $heightCm;
-            $estimatedWeight = 22 * ($heightM * $heightM);
-            return (int) round($estimatedWeight * 35);
-        }
-
-        // Valor padrão recomendado pela OMS
-        return 2500;
-    }
 
     /**
      * Obter dados de consumo dos últimos 7 dias.
      *
      * Retorna array com dados diários incluindo dias sem consumo.
+     *
+     * TODO: Mover para WaterHydrationService.getSevenDaysData() em refactoring futuro
      */
     private function getSevenDaysData(): array
     {
-        $sevenDaysAgo = now()->subDays(6);
+        $sevenDaysAgo = now()->subDays(6)->toDateString();
 
         $consumptions = auth()->user()
             ->waterConsumptions()
-            ->where('consumption_date', '>=', $sevenDaysAgo)
+            ->whereDate('consumption_date', '>=', $sevenDaysAgo)
             ->select(
                 DB::raw('DATE(consumption_date) as date'),
                 DB::raw('SUM(amount_ml) as total_ml')
@@ -265,15 +271,18 @@ class WaterConsumptionController extends Controller
         // Criar array com todos os 7 dias
         $data = [];
         for ($i = 6; $i >= 0; $i--) {
-            $date = now()->subDays($i)->format('Y-m-d');
-            $dayName = now()->subDays($i)->locale('pt_BR')->dayName;
-            $shortDay = now()->subDays($i)->format('d/m');
+            $baseDate = now()->subDays($i);
+            $date = $baseDate->toDateString();
+            $dayName = $baseDate->locale('pt_BR')->dayName;
+            $dayShort = $baseDate->locale('pt_BR')->isoFormat('ddd');
+            $shortDay = $baseDate->format('d/m');
 
             $consumption = $consumptions->firstWhere('date', $date);
 
             $data[] = [
                 'date' => $date,
                 'day' => $dayName,
+                'day_short' => $dayShort,
                 'shortDay' => $shortDay,
                 'amount_ml' => $consumption ? (int) $consumption->total_ml : 0,
                 'amount_liters' => $consumption ? round($consumption->total_ml / 1000, 2) : 0,

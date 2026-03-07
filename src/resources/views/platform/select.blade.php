@@ -55,7 +55,7 @@
                             </div>
 
                             <!-- Button -->
-                            <form action="{{ route('platform.set') }}" method="POST">
+                            <form action="{{ route('portal.definir') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="role" value="nutritionist">
                                 <button type="submit" class="w-full px-6 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-2xl font-bold hover:shadow-lg hover:shadow-green-200 transition-all duration-300 flex items-center justify-center gap-2 group-hover:scale-105">
@@ -96,7 +96,7 @@
                             </div>
 
                             <!-- Button -->
-                            <form action="{{ route('platform.set') }}" method="POST">
+                            <form action="{{ route('portal.definir') }}" method="POST">
                                 @csrf
                                 <input type="hidden" name="role" value="patient">
                                 <button type="submit" class="w-full px-6 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white rounded-2xl font-bold hover:shadow-lg hover:shadow-blue-200 transition-all duration-300 flex items-center justify-center gap-2 group-hover:scale-105">

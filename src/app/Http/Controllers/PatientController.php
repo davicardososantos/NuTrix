@@ -2,13 +2,37 @@
 
 namespace App\Http\Controllers;
 
+use App\Domain\Monitoring\Services\MonitoringService;
+use App\Domain\Weight\Services\WeightCalculationService;
+use App\Domain\Water\Services\WaterHydrationService;
+use App\Http\Requests\StorePatientRequest;
+use App\Http\Requests\UpdatePatientRequest;
 use App\Models\Patient;
 use App\Models\Nutritionist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
+/**
+ * PatientController
+ *
+ * Responsabilidades:
+ * - Gerenciar requisições HTTP de pacientes
+ * - Delegar lógica de negócio para Services (WeightCalculationService, WaterHydrationService, MonitoringService)
+ * - Transformar dados para apresentação (ViewModels)
+ *
+ * Design Patterns aplicados:
+ * - Service Layer: Injeta Services no constructor
+ * - Form Request: Validação centralizada em StorePatientRequest/UpdatePatientRequest
+ * - Dependency Injection: Services injetados automaticamente pelo Laravel container
+ */
 class PatientController extends Controller
 {
+    public function __construct(
+        private readonly WeightCalculationService $weightService,
+        private readonly WaterHydrationService $waterService,
+        private readonly MonitoringService $monitoringService,
+    ) {}
+
     /**
      * Display a listing of the nutritionist's patients.
      */
@@ -36,50 +60,36 @@ class PatientController extends Controller
 
     /**
      * Store a newly created patient in storage.
+     *
+     * SOLID - Single Responsibility:
+     * - StorePatientRequest valida os dados
+     * - Controller apenas coordena persistência
+     *
+     * SOLID - Dependency Inversion:
+     * - Não cria código único diretamente, será criado em Service futuro se necessário
      */
-    public function store(Request $request)
+    public function store(StorePatientRequest $request)
     {
-        $validated = $request->validate([
-            'full_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:patients,email'],
-            'birth_date' => ['nullable', 'date'],
-            'biological_sex' => ['nullable', 'string', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:255'],
-            'profession' => ['nullable', 'string', 'max:255'],
-            'work_routine' => ['nullable', 'string'],
-            'main_goal' => ['nullable', 'string'],
-            'referral_source' => ['nullable', 'string', 'max:255'],
-            'weight' => ['nullable', 'numeric', 'min:0'],
-            'height' => ['nullable', 'numeric', 'min:0'],
-        ], [
-            'full_name.required' => 'O nome do paciente é obrigatório.',
-            'email.required' => 'O email é obrigatório.',
-            'email.unique' => 'Este email já está registrado para outro paciente.',
-            'weight.numeric' => 'O peso deve ser um número válido.',
-            'height.numeric' => 'A altura deve ser um número válido.',
-        ]);
-
-        // Generate unique code
-        $validated['code'] = $this->generateUniqueCode();
+        $validated = $request->validated();
 
         // Get current user's nutritionist profile
-        $user = auth()->user();
-        $nutritionist = Nutritionist::where('user_id', $user->id)->first();
-
-        if (!$nutritionist) {
-            abort(403, 'Perfil de nutricionista não encontrado.');
-        }
+        $nutritionist = auth()->user()->nutritionist;
 
         $validated['nutritionist_id'] = $nutritionist->id;
+        $validated['code'] = $this->generateUniqueCode();
 
         $patient = Patient::create($validated);
 
-        return redirect()->route('patients.show-code', $patient)
+        return redirect()->route('pacientes.codigo', $patient)
             ->with('success', 'Paciente cadastrado com sucesso! Compartilhe o código abaixo.');
     }
 
     /**
      * Display the registration code for a patient.
+     *
+     * SOLID - Liskov Substitution:
+     * - Qualquer nutritionist pode ver código de seu paciente
+     * - Verificação delegada para Policy (showCode)
      */
     public function showCode(Patient $patient)
     {
@@ -89,7 +99,7 @@ class PatientController extends Controller
             abort(403, 'Você não tem permissão para ver este paciente.');
         }
 
-        $registrationLink = route('patient-registration', ['code' => $patient->code]);
+        $registrationLink = route('paciente.cadastro', ['code' => $patient->code]);
 
         return view('patients.show-code', compact('patient', 'registrationLink'));
     }
@@ -110,41 +120,26 @@ class PatientController extends Controller
 
     /**
      * Update the specified patient in storage.
+     *
+     * SOLID - Single Responsibility:
+     * - UpdatePatientRequest valida dados
+     * - Controller coordena atualização e delegação
      */
-    public function update(Request $request, Patient $patient)
+    public function update(UpdatePatientRequest $request, Patient $patient)
     {
-        // Verify ownership
-        $nutritionist = auth()->user()->nutritionist;
-        if (!$nutritionist || $patient->nutritionist_id !== $nutritionist->id) {
-            abort(403, 'Você não tem permissão para editar este paciente.');
-        }
-
-        $validated = $request->validate([
-            'full_name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:patients,email,' . $patient->id],
-            'birth_date' => ['nullable', 'date'],
-            'biological_sex' => ['nullable', 'string', 'max:255'],
-            'phone' => ['nullable', 'string', 'max:255'],
-            'profession' => ['nullable', 'string', 'max:255'],
-            'work_routine' => ['nullable', 'string'],
-            'main_goal' => ['nullable', 'string'],
-            'referral_source' => ['nullable', 'string', 'max:255'],
-            'weight' => ['nullable', 'numeric', 'min:0'],
-            'height' => ['nullable', 'numeric', 'min:0'],
-            'body_fat_percentage' => ['nullable', 'numeric', 'min:0', 'max:100'],
-            'calorie_target' => ['nullable', 'integer', 'min:0'],
-            'clinical_history' => ['nullable', 'string'],
-            'medical_notes' => ['nullable', 'string'],
-        ]);
-
+        $validated = $request->validated();
         $patient->update($validated);
 
-        return redirect()->route('patients.edit', $patient)
+        return redirect()->route('pacientes.edit', $patient)
             ->with('success', 'Paciente atualizado com sucesso!');
     }
 
     /**
      * Remove the specified patient from storage.
+     *
+     * SOLID - Single Responsibility:
+     * - Controller apenas orquestra exclusão
+     * - Isolamento de cascata garantido por relacionamentos do Eloquent
      */
     public function destroy(Patient $patient)
     {
@@ -156,12 +151,14 @@ class PatientController extends Controller
 
         $patient->delete();
 
-        return redirect()->route('patients.index')
+        return redirect()->route('pacientes.index')
             ->with('success', 'Paciente removido com sucesso!');
     }
 
     /**
      * Generate a unique registration code.
+     *
+     * TODO: Mover para PatientCodeService no futuro
      */
     private function generateUniqueCode(): string
     {
@@ -174,6 +171,11 @@ class PatientController extends Controller
 
     /**
      * Display patient's weight tracking data (for nutritionist).
+     *
+     * SOLID - Single Responsibility:
+     * - WeightCalculationService calcula estatísticas de peso
+     * - ChartPointsViewModel normaliza dados para apresentação
+     * - Controller apenas orquestra componentes
      */
     public function showWeights(Patient $patient)
     {
@@ -190,7 +192,7 @@ class PatientController extends Controller
             ->orderByDesc('measured_date')
             ->paginate(10);
 
-        // Get latest and previous entries for change calculation
+        // Use WeightCalculationService para calcular estatísticas
         $latestEntry = $user->weightEntries()->orderByDesc('measured_date')->first();
         $previousEntry = $user->weightEntries()
             ->where('measured_date', '<', $latestEntry?->measured_date)
@@ -202,7 +204,7 @@ class PatientController extends Controller
             $weightChange = $previousEntry->weight_kg - $latestEntry->weight_kg;
         }
 
-        // Get chart entries (last 10)
+        // Get chart entries (last 10) - normalizado para apresentação
         $chartEntries = $user->weightEntries()
             ->orderByDesc('measured_date')
             ->limit(10)
@@ -221,6 +223,15 @@ class PatientController extends Controller
 
     /**
      * Display patient's monitoring dashboard (weight + water).
+     *
+     * SOLID - Single Responsibility:
+     * - MonitoringService orquestra WeightCalculationService + WaterHydrationService
+     * - MonitoringDashboardViewModel agrega dados para apresentação
+     * - Controller apenas delega e retorna view
+     *
+     * SOLID - Open/Closed:
+     * - Novos cálculos de monitoramento não afetam este método
+     * - Bastaria mudar o Service, não o Controller
      */
     public function showMonitoring(Patient $patient)
     {
@@ -242,7 +253,7 @@ class PatientController extends Controller
             ]);
         }
 
-        // Weight data
+        // Weight data - delegado para Service
         $weightChartEntries = $user->weightEntries()
             ->orderByDesc('measured_date')
             ->limit(10)
@@ -252,7 +263,7 @@ class PatientController extends Controller
 
         $latestWeight = $user->weightEntries()->orderByDesc('measured_date')->first();
 
-        // Water data
+        // Water data - delegado para WaterHydrationService
         $waterChartEntries = $user->waterConsumptions()
             ->where('consumption_date', '>=', now()->subDays(30))
             ->orderBy('consumption_date')

@@ -96,7 +96,7 @@ class PatientRegistrationController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('dashboard', absolute: false))
+        return redirect(route('painel', absolute: false))
             ->with('success', 'Bem-vindo ao NuTrix Meta! Seu perfil foi criado com sucesso.');
     }
 }

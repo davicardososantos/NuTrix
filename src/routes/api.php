@@ -14,9 +14,9 @@ Route::post('check-email', function (Request $request) {
 
 Route::middleware('auth')->group(function () {
     // CRUD básico de consumo de água
-    Route::apiResource('water-consumptions', WaterConsumptionController::class);
+    Route::apiResource('consumos-agua', WaterConsumptionController::class);
 
     // Endpoints utilitários
-    Route::get('water-consumptions/stats/today', [WaterConsumptionController::class, 'totalToday'])->name('water-consumptions.today');
-    Route::post('water-consumptions/stats/period', [WaterConsumptionController::class, 'periodTotal'])->name('water-consumptions.period');
+    Route::get('consumos-agua/estatisticas/hoje', [WaterConsumptionController::class, 'totalToday'])->name('consumos-agua.hoje');
+    Route::post('consumos-agua/estatisticas/periodo', [WaterConsumptionController::class, 'periodTotal'])->name('consumos-agua.periodo');
 });

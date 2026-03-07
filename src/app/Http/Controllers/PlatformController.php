@@ -27,7 +27,7 @@ class PlatformController extends Controller
 
         if ($hasNutritionist) {
             $request->session()->put('active_role', 'nutritionist');
-            return redirect()->route('patients.index');
+            return redirect()->route('pacientes.index');
         }
 
         if ($hasPatient) {
@@ -76,7 +76,7 @@ class PlatformController extends Controller
         $request->session()->put('active_role', $role);
 
         return $role === 'nutritionist'
-            ? redirect()->route('patients.index')
-            : redirect()->route('water-consumptions.index');
+            ? redirect()->route('pacientes.index')
+            : redirect()->route('consumos-agua.index');
     }
 }

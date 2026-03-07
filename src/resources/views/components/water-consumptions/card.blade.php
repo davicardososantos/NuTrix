@@ -13,12 +13,12 @@
     </div>
 
     <div class="mt-4 flex gap-2">
-        <a href="{{ route('water-consumptions.edit', $consumption) }}" 
+        <a href="{{ route('consumos-agua.editar', $consumption) }}"
            class="inline-flex items-center px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm hover:bg-blue-200 transition">
             {{ __('Editar') }}
         </a>
-        
-        <x-delete-modal :action="route('water-consumptions.destroy', $consumption)" title="Deletar Consumo" message="Tem certeza que deseja deletar este consumo? Esta ação não pode ser desfeita." button-text="Deletar" class="px-3 py-1 bg-red-100 text-red-700 rounded text-sm hover:bg-red-200">
+
+        <x-delete-modal :action="route('consumos-agua.excluir', $consumption)" title="Deletar Consumo" message="Tem certeza que deseja deletar este consumo? Esta ação não pode ser desfeita." button-text="Deletar" class="px-3 py-1 bg-red-100 text-red-700 rounded text-sm hover:bg-red-200">
             {{ __('Deletar') }}
         </x-delete-modal>
     </div>

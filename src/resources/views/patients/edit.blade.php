@@ -118,7 +118,7 @@
                             <p class="text-sm text-gray-600 mt-1">Atualize os dados do paciente</p>
                         </div>
 
-                        <form action="{{ route('patients.update', $patient) }}" method="POST" class="p-6 md:p-8 space-y-6">
+                        <form action="{{ route('pacientes.update', $patient) }}" method="POST" class="p-6 md:p-8 space-y-6">
                             @csrf
                             @method('PUT')
 
@@ -364,7 +364,7 @@
                             </div>
 
                             <div class="flex flex-col sm:flex-row gap-3 pt-6 border-t border-gray-200">
-                                <a href="{{ route('patients.index') }}" class="flex-1 px-6 py-3 bg-gray-200 text-gray-800 font-bold rounded-xl hover:bg-gray-300 transition-all duration-300 text-center flex items-center justify-center gap-2">
+                                <a href="{{ route('pacientes.index') }}" class="flex-1 px-6 py-3 bg-gray-200 text-gray-800 font-bold rounded-xl hover:bg-gray-300 transition-all duration-300 text-center flex items-center justify-center gap-2">
                                     <i class="fas fa-times"></i>
                                     Cancelar
                                 </a>

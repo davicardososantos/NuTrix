@@ -4,7 +4,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\WaterConsumptionController;
 use App\Http\Controllers\PatientController;
 use App\Http\Controllers\WeightController;
-use App\Http\Controllers\WeightEntryController;
 use App\Http\Controllers\PlatformController;
 use App\Http\Controllers\Auth\PatientRegistrationController;
 use Illuminate\Support\Facades\Route;
@@ -13,49 +12,50 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', [PlatformController::class, 'entry'])
+Route::get('/painel', [PlatformController::class, 'entry'])
     ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+    ->name('painel');
 
 // Patient registration routes (public - no authentication required)
-Route::get('/paciente/{code}', [PatientRegistrationController::class, 'create'])->name('patient-registration');
-Route::post('/paciente/{code}', [PatientRegistrationController::class, 'store'])->name('patient-registration.store');
+Route::get('/paciente/{code}', [PatientRegistrationController::class, 'create'])->name('paciente.cadastro');
+Route::post('/paciente/{code}', [PatientRegistrationController::class, 'store'])->name('paciente.cadastro.salvar');
 
 Route::middleware('auth')->group(function () {
     // Platform selection
-    Route::get('/portal', [PlatformController::class, 'select'])->name('platform.select');
-    Route::post('/portal', [PlatformController::class, 'set'])->name('platform.set');
+    Route::get('/portal', [PlatformController::class, 'select'])->name('portal.selecionar');
+    Route::post('/portal', [PlatformController::class, 'set'])->name('portal.definir');
 
     // Profile routes
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/perfil', [ProfileController::class, 'edit'])->name('perfil.editar');
+    Route::patch('/perfil', [ProfileController::class, 'update'])->name('perfil.atualizar');
+    Route::delete('/perfil', [ProfileController::class, 'destroy'])->name('perfil.excluir');
 
     // Weight tracking (quick)
-    Route::post('/weight', [WeightController::class, 'store'])->name('weight.store');
+    Route::post('/peso', [WeightController::class, 'storeQuick'])->name('peso.atualizar');
 
     // Water consumption routes
     Route::middleware('role:patient')->group(function () {
-        Route::get('/water-consumptions', [WaterConsumptionController::class, 'index'])->name('water-consumptions.index');
-        Route::post('/water-consumptions', [WaterConsumptionController::class, 'store'])->name('water-consumptions.store');
-        Route::get('/water-consumptions/{waterConsumption}/edit', [WaterConsumptionController::class, 'edit'])->name('water-consumptions.edit');
-        Route::put('/water-consumptions/{waterConsumption}', [WaterConsumptionController::class, 'update'])->name('water-consumptions.update');
-        Route::delete('/water-consumptions/{waterConsumption}', [WaterConsumptionController::class, 'destroy'])->name('water-consumptions.destroy');
+        Route::get('/consumos-agua', [WaterConsumptionController::class, 'index'])->name('consumos-agua.index');
+        Route::post('/consumos-agua', [WaterConsumptionController::class, 'store'])->name('consumos-agua.store');
+        Route::get('/consumos-agua/{waterConsumption}/editar', [WaterConsumptionController::class, 'edit'])->name('consumos-agua.editar');
+        Route::put('/consumos-agua/{waterConsumption}', [WaterConsumptionController::class, 'update'])->name('consumos-agua.atualizar');
+        Route::delete('/consumos-agua/{waterConsumption}', [WaterConsumptionController::class, 'destroy'])->name('consumos-agua.excluir');
 
         // Weight tracking routes
-        Route::get('/weights', [WeightEntryController::class, 'index'])->name('weights.index');
-        Route::post('/weights', [WeightEntryController::class, 'store'])->name('weights.store');
-        Route::get('/weights/{weightEntry}/edit', [WeightEntryController::class, 'edit'])->name('weights.edit');
-        Route::put('/weights/{weightEntry}', [WeightEntryController::class, 'update'])->name('weights.update');
-        Route::delete('/weights/{weightEntry}', [WeightEntryController::class, 'destroy'])->name('weights.destroy');
+        Route::get('/pesos', [WeightController::class, 'index'])->name('pesos.index');
+        Route::post('/pesos', [WeightController::class, 'store'])->name('pesos.store');
+        Route::get('/pesos/{weightEntry}/editar', [WeightController::class, 'edit'])->name('pesos.editar');
+        Route::put('/pesos/{weightEntry}', [WeightController::class, 'update'])->name('pesos.atualizar');
+        Route::delete('/pesos/{weightEntry}', [WeightController::class, 'destroy'])->name('pesos.excluir');
     });
 
     // Patient management routes (only for nutritionists)
     Route::middleware('role:nutritionist')->group(function () {
-        Route::resource('patients', PatientController::class);
-        Route::get('/patients/{patient}/code', [PatientController::class, 'showCode'])->name('patients.show-code');
-        Route::get('/patients/{patient}/weights', [PatientController::class, 'showWeights'])->name('patients.weights');
-        Route::get('/patients/{patient}/monitoring', [PatientController::class, 'showMonitoring'])->name('patients.monitoring');
+        Route::resource('pacientes', PatientController::class)
+            ->parameters(['pacientes' => 'patient']);
+        Route::get('/pacientes/{patient}/codigo', [PatientController::class, 'showCode'])->name('pacientes.codigo');
+        Route::get('/pacientes/{patient}/pesos', [PatientController::class, 'showWeights'])->name('pacientes.pesos');
+        Route::get('/pacientes/{patient}/monitoramento', [PatientController::class, 'showMonitoring'])->name('pacientes.monitoramento');
     });
 });
 

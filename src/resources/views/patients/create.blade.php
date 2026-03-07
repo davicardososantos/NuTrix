@@ -13,7 +13,7 @@
                             <p class="text-xs md:text-sm text-gray-500 mt-0.5">Cadastro inicial - dados complementares podem ser adicionados depois</p>
                         </div>
                     </div>
-                    <a href="{{ route('patients.index') }}" class="px-4 md:px-6 py-3 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold transition-all duration-300 flex items-center gap-2 whitespace-nowrap">
+                    <a href="{{ route('pacientes.index') }}" class="px-4 md:px-6 py-3 rounded-xl bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold transition-all duration-300 flex items-center gap-2 whitespace-nowrap">
                         <i class="fas fa-arrow-left"></i>
                         <span class="hidden md:inline">Voltar</span>
                     </a>
@@ -33,7 +33,7 @@
                 </div>
 
                 <!-- Form Body -->
-                <form action="{{ route('patients.store') }}" method="POST" class="p-6 md:p-8 space-y-6">
+                <form action="{{ route('pacientes.store') }}" method="POST" class="p-6 md:p-8 space-y-6">
                     @csrf
 
                     <!-- Full Name -->
@@ -129,7 +129,7 @@
 
                     <!-- Buttons -->
                     <div class="flex flex-col sm:flex-row gap-3">
-                        <a href="{{ route('patients.index') }}" class="flex-1 px-6 py-3 bg-gray-200 text-gray-800 font-bold rounded-xl hover:bg-gray-300 transition-all duration-300 text-center flex items-center justify-center gap-2">
+                        <a href="{{ route('pacientes.index') }}" class="flex-1 px-6 py-3 bg-gray-200 text-gray-800 font-bold rounded-xl hover:bg-gray-300 transition-all duration-300 text-center flex items-center justify-center gap-2">
                             <i class="fas fa-times"></i>
                             Cancelar
                         </a>

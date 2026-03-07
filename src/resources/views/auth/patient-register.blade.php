@@ -13,21 +13,21 @@
         </p>
     </div>
 
-    <form method="POST" action="{{ route('patient-registration.store', ['code' => $code]) }}">
+    <form method="POST" action="{{ route('paciente.cadastro.salvar', ['code' => $code]) }}">
         @csrf
         <input type="hidden" name="code" value="{{ $code }}">
 
         <!-- Name (Read-only) -->
         <div>
             <x-input-label for="name" value="Nome (não pode ser alterado)" />
-            <x-text-input 
-                id="name" 
-                class="block mt-1 w-full bg-gray-100 cursor-not-allowed" 
-                type="text" 
-                name="name" 
-                value="{{ $patient->full_name }}" 
-                readonly 
-                autofocus 
+            <x-text-input
+                id="name"
+                class="block mt-1 w-full bg-gray-100 cursor-not-allowed"
+                type="text"
+                name="name"
+                value="{{ $patient->full_name }}"
+                readonly
+                autofocus
                 autocomplete="name"
             />
         </div>
@@ -35,13 +35,13 @@
         <!-- Email Address (Read-only) -->
         <div class="mt-4">
             <x-input-label for="email" value="Email (não pode ser alterado)" />
-            <x-text-input 
-                id="email" 
-                class="block mt-1 w-full bg-gray-100 cursor-not-allowed" 
-                type="email" 
-                name="email" 
-                value="{{ $patient->email }}" 
-                readonly 
+            <x-text-input
+                id="email"
+                class="block mt-1 w-full bg-gray-100 cursor-not-allowed"
+                type="email"
+                name="email"
+                value="{{ $patient->email }}"
+                readonly
                 autocomplete="username"
             />
         </div>
@@ -49,12 +49,12 @@
         <!-- Weight -->
         <div class="mt-4">
             <x-input-label for="weight" value="Peso (kg)" />
-            <x-decimal-input 
-                id="weight" 
-                class="block mt-1 w-full" 
-                type="number" 
-                name="weight" 
-                :value="old('weight')" 
+            <x-decimal-input
+                id="weight"
+                class="block mt-1 w-full"
+                type="number"
+                name="weight"
+                :value="old('weight')"
                 step="0.1"
                 placeholder="70,5"
             />
@@ -64,12 +64,12 @@
         <!-- Height -->
         <div class="mt-4">
             <x-input-label for="height" value="Altura (cm)" />
-            <x-decimal-input 
-                id="height" 
-                class="block mt-1 w-full" 
-                type="number" 
-                name="height" 
-                :value="old('height')" 
+            <x-decimal-input
+                id="height"
+                class="block mt-1 w-full"
+                type="number"
+                name="height"
+                :value="old('height')"
                 step="0.1"
                 placeholder="175,0"
             />
@@ -84,12 +84,12 @@
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" value="Senha (opcional se email já existe)" />
-            <x-text-input 
-                id="password" 
+            <x-text-input
+                id="password"
                 class="block mt-1 w-full"
                 type="password"
                 name="password"
-                autocomplete="new-password" 
+                autocomplete="new-password"
                 placeholder="Mínimo 8 caracteres (deixe em branco se não é necessário)"
             />
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
@@ -98,12 +98,12 @@
         <!-- Confirm Password -->
         <div class="mt-4">
             <x-input-label for="password_confirmation" value="Confirmar Senha" />
-            <x-text-input 
-                id="password_confirmation" 
+            <x-text-input
+                id="password_confirmation"
                 class="block mt-1 w-full"
                 type="password"
-                name="password_confirmation" 
-                autocomplete="new-password" 
+                name="password_confirmation"
+                autocomplete="new-password"
                 placeholder="Repita a senha acima (opcional)"
             />
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />

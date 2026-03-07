@@ -25,7 +25,7 @@
 
                 <!-- Acompanhamento -->
                 <a
-                    href="{{ route('patients.monitoring', $patient) }}"
+                    href="{{ route('pacientes.monitoramento', $patient) }}"
                     class="group flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all duration-300 {{ $activeTab === 'monitoring' ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg shadow-green-200' : 'bg-white border-2 border-green-100 text-gray-700 hover:border-green-300 hover:shadow-md' }}"
                 >
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center {{ $activeTab === 'monitoring' ? 'bg-white/20' : 'bg-green-50' }}">
@@ -44,7 +44,7 @@
 
                 <!-- Profile -->
                 <a
-                    href="{{ route('patients.edit', $patient) }}"
+                    href="{{ route('pacientes.edit', $patient) }}"
                     class="group flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all duration-300 {{ $activeTab === 'profile' ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg shadow-green-200' : 'bg-white border-2 border-green-100 text-gray-700 hover:border-green-300 hover:shadow-md' }}"
                 >
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center {{ $activeTab === 'profile' ? 'bg-white/20' : 'bg-green-50' }}">
@@ -72,7 +72,7 @@
 
                 <!-- Peso -->
                 <a
-                    href="{{ route('patients.weights', $patient) }}"
+                    href="{{ route('pacientes.pesos', $patient) }}"
                     class="group flex items-center gap-3 px-4 py-3 rounded-xl font-bold transition-all duration-300 {{ $activeTab === 'weights' ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg shadow-green-200' : 'bg-white border-2 border-green-100 text-gray-700 hover:border-green-300 hover:shadow-md' }}"
                 >
                     <div class="w-8 h-8 rounded-lg flex items-center justify-center {{ $activeTab === 'weights' ? 'bg-white/20' : 'bg-green-50' }}">
@@ -187,7 +187,7 @@
             <p class="text-xs uppercase text-gray-500 font-bold mb-3 px-2">Ações Rápidas</p>
             <div class="space-y-2">
                 <a
-                    href="{{ route('patients.index') }}"
+                    href="{{ route('pacientes.index') }}"
                     class="flex items-center gap-2 px-4 py-3 rounded-xl bg-white border-2 border-gray-200 text-gray-700 hover:border-green-300 hover:bg-green-50 transition-all duration-300 text-sm font-bold"
                 >
                     <i class="fas fa-arrow-left text-green-600"></i>

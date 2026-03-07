@@ -1,6 +1,6 @@
 @php
     use App\Helpers\IMCHelper;
-    
+
     $patient = auth()->user()->patient;
     $imc = $patient && $patient->weight && $patient->height ? IMCHelper::calculate($patient->weight, $patient->height) : null;
     $imcClass = $imc ? IMCHelper::classify($imc, $patient?->birth_date) : null;
@@ -132,7 +132,7 @@
                         <h3 class="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
                             <i class="fas fa-plus-circle text-emerald-600"></i> Registrar Peso
                         </h3>
-                        <form action="{{ route('weights.store') }}" method="POST" class="space-y-3">
+                        <form action="{{ route('pesos.store') }}" method="POST" class="space-y-3">
                             @csrf
                             <div>
                                 <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
@@ -332,14 +332,14 @@
                                 </div>
                                 <div class="flex items-center gap-2">
                                     <a
-                                        href="{{ route('weights.edit', $entry) }}"
+                                        href="{{ route('pesos.editar', $entry) }}"
                                         class="p-2 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors duration-200"
                                         title="Editar"
                                     >
                                         <i class="fas fa-pen-to-square text-sm"></i>
                                     </a>
                                     <x-delete-modal
-                                        :action="route('weights.destroy', $entry)"
+                                        :action="route('pesos.excluir', $entry)"
                                         title="Deletar Registro"
                                         message="Tem certeza que deseja deletar este registro de peso?"
                                         button-text="Deletar"

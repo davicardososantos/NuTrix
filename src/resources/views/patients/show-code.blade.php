@@ -10,7 +10,7 @@
                 </h2>
                 <p class="text-gray-600 mt-1 text-sm md:text-base">Compartilhe o código abaixo para que seu paciente se registre</p>
             </div>
-            <a href="{{ route('patients.index') }}" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition font-semibold text-sm">
+            <a href="{{ route('pacientes.index') }}" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg transition font-semibold text-sm">
                 ← Voltar
             </a>
         </div>
@@ -39,14 +39,14 @@
                 <div class="bg-gray-50 rounded-xl p-6 border border-gray-200 mb-6">
                     <p class="text-sm text-gray-600 font-semibold mb-3">LINK DE CADASTRO</p>
                     <div class="flex gap-2 items-center">
-                        <input 
-                            type="text" 
-                            value="{{ $registrationLink }}" 
+                        <input
+                            type="text"
+                            value="{{ $registrationLink }}"
                             id="registrationLink"
                             readonly
                             class="flex-1 px-4 py-3 bg-white border border-gray-300 rounded-lg text-sm break-all"
                         />
-                        <button 
+                        <button
                             type="button"
                             onclick="copyToClipboard()"
                             class="px-4 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition whitespace-nowrap"
@@ -58,7 +58,7 @@
 
                 <!-- WhatsApp Share -->
                 <div class="flex gap-3 justify-center mb-6">
-                    <a href="https://wa.me/?text=Olá! Segue seu código de cadastro no NuTrix Meta: {{ $patient->code }} - Link: {{ $registrationLink }}" 
+                    <a href="https://wa.me/?text=Olá! Segue seu código de cadastro no NuTrix Meta: {{ $patient->code }} - Link: {{ $registrationLink }}"
                        target="_blank"
                        class="px-6 py-3 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition flex items-center gap-2">
                         💬 Compartilhar via WhatsApp
@@ -84,13 +84,13 @@
 
             <!-- Action Buttons -->
             <div class="flex gap-4">
-                <a href="{{ route('patients.create') }}" class="flex-1 px-6 py-3 bg-gradient-to-r from-amber-700 to-green-700 text-white font-semibold rounded-lg hover:shadow-lg hover:scale-105 transition-all text-center">
+                <a href="{{ route('pacientes.create') }}" class="flex-1 px-6 py-3 bg-gradient-to-r from-amber-700 to-green-700 text-white font-semibold rounded-lg hover:shadow-lg hover:scale-105 transition-all text-center">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                     </svg>
                     Cadastrar Outro Paciente
                 </a>
-                <a href="{{ route('patients.index') }}" class="flex-1 px-6 py-3 bg-gray-200 text-gray-800 font-semibold rounded-lg hover:bg-gray-300 transition text-center">
+                <a href="{{ route('pacientes.index') }}" class="flex-1 px-6 py-3 bg-gray-200 text-gray-800 font-semibold rounded-lg hover:bg-gray-300 transition text-center">
                     Ir para Meus Pacientes
                 </a>
             </div>
@@ -102,13 +102,13 @@
             const link = document.getElementById('registrationLink');
             link.select();
             document.execCommand('copy');
-            
+
             // Visual feedback
             const button = event.target;
             const originalText = button.textContent;
             button.textContent = 'Copiado!';
             button.classList.add('bg-green-600');
-            
+
             setTimeout(() => {
                 button.textContent = originalText;
                 button.classList.remove('bg-green-600');

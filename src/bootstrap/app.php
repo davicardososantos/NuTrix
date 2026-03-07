@@ -16,6 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'nutritionist' => \App\Http\Middleware\IsNutritionist::class,
             'role' => \App\Http\Middleware\EnsureActiveRole::class,
         ]);
+
+        $middleware->redirectGuestsTo('/login');
+        $middleware->redirectUsersTo('/painel');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->render(function (TokenMismatchException $e, $request) {

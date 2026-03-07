@@ -7,7 +7,7 @@
                 </h2>
                 <p class="text-gray-600 mt-2">{{ auth()->user()->name }}, bem-vindo de volta! Veja seu progresso abaixo</p>
             </div>
-            <a href="{{ route('water-consumptions.index') }}" class="px-6 py-3 bg-gradient-to-r from-amber-700 to-green-700 text-white font-semibold rounded-lg hover:shadow-lg hover:scale-105 transition-all duration-200">
+            <a href="{{ route('consumos-agua.index') }}" class="px-6 py-3 bg-gradient-to-r from-amber-700 to-green-700 text-white font-semibold rounded-lg hover:shadow-lg hover:scale-105 transition-all duration-200">
                 💧 Registrar Consumo
             </a>
         </div>
@@ -83,7 +83,7 @@
                                 <option>Últimos 3 meses</option>
                             </select>
                         </div>
-                        
+
                         <!-- Simple Bar Chart -->
                         <div class="space-y-4">
                             <div class="flex items-end justify-between h-64">
@@ -144,7 +144,7 @@
                     <div class="bg-white rounded-2xl shadow-lg p-6 border border-gray-100">
                         <h3 class="text-lg font-bold text-gray-900 mb-4">Ações Rápidas</h3>
                         <div class="space-y-3">
-                            <a href="{{ route('water-consumptions.index') }}" class="flex items-center gap-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition cursor-pointer">
+                            <a href="{{ route('consumos-agua.index') }}" class="flex items-center gap-3 p-3 bg-blue-50 hover:bg-blue-100 rounded-lg transition cursor-pointer">
                                 <span class="text-xl">💧</span>
                                 <span class="text-sm font-medium text-gray-900">Adicionar consumo</span>
                                 <span class="ml-auto text-gray-400">→</span>

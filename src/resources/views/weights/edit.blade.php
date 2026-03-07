@@ -3,7 +3,7 @@
         <!-- Back Navigation -->
         <div class="sticky top-14 md:top-16 bg-white border-b border-gray-100 z-30">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-                <a href="{{ route('weights.index') }}" class="inline-flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-semibold transition-colors">
+                <a href="{{ route('pesos.index') }}" class="inline-flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-semibold transition-colors">
                     <i class="fas fa-chevron-left"></i>
                     <span>Voltar</span>
                 </a>
@@ -78,7 +78,7 @@
                         <!-- Delete Button -->
                         <div class="mt-8 pt-6 border-t border-gray-200">
                             <x-delete-modal
-                                :action="route('weights.destroy', $entry)"
+                                :action="route('pesos.excluir', $entry)"
                                 title="Deletar Registro de Peso"
                                 message="Tem certeza que deseja deletar este registro de peso? Esta acao nao pode ser desfeita."
                                 button-text="Deletar"

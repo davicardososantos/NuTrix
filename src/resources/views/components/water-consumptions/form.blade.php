@@ -10,7 +10,7 @@
     </div>
 
     <!-- Form -->
-    <form action="{{ $consumption ? route('water-consumptions.update', $consumption) : route('water-consumptions.store') }}" 
+    <form action="{{ $consumption ? route('consumos-agua.atualizar', $consumption) : route('consumos-agua.store') }}"
           method="POST" class="p-6 md:p-8 space-y-6">
         @csrf
         @if($consumption)
@@ -24,7 +24,7 @@
                 <x-input-label for="amount_ml" value="Quantidade (ml)" class="font-bold text-gray-900" />
             </div>
             <div class="relative">
-                <x-text-input 
+                <x-text-input
                     id="amount_ml"
                     class="block w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                     type="number"
@@ -46,7 +46,7 @@
                 <i class="fas fa-calendar text-purple-600"></i>
                 <x-input-label for="consumption_date" value="Data do Consumo" class="font-bold text-gray-900" />
             </div>
-            <x-text-input 
+            <x-text-input
                 id="consumption_date"
                 class="block w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 type="date"
@@ -66,8 +66,8 @@
                 <i class="fas {{ $consumption ? 'fa-check-circle' : 'fa-plus-circle' }}"></i>
                 {{ $consumption ? 'Atualizar' : 'Registrar' }}
             </x-primary-button>
-            
-            <a href="{{ route('water-consumptions.index') }}" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gray-200 text-gray-900 font-bold rounded-xl hover:bg-gray-300 transition-all duration-300 text-base">
+
+            <a href="{{ route('consumos-agua.index') }}" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gray-200 text-gray-900 font-bold rounded-xl hover:bg-gray-300 transition-all duration-300 text-base">
                 <i class="fas fa-times"></i>
                 Cancelar
             </a>

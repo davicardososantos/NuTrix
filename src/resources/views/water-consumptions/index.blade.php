@@ -75,7 +75,7 @@
                     <h3 class="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
                         <i class="fas fa-plus-circle text-blue-600"></i> Registrar Consumo
                     </h3>
-                    <form action="{{ route('water-consumptions.store') }}" method="POST" class="space-y-3">
+                    <form action="{{ route('consumos-agua.store') }}" method="POST" class="space-y-3">
                         @csrf
                         <div>
                             <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
@@ -121,7 +121,7 @@
                 <div class="grid grid-cols-7 gap-2">
                     @foreach($sevenDaysData as $day)
                         <div class="flex flex-col items-center group">
-                            <p class="text-xs font-bold text-gray-600 mb-1">{{ substr($day['day'], 0, 3) }}</p>
+                            <p class="text-xs font-bold text-gray-600 mb-1">{{ $day['day_short'] }}</p>
                             <p class="text-xs text-gray-500 mb-2">{{ $day['shortDay'] }}</p>
                             <div class="relative h-24 bg-gray-100 rounded-xl flex items-end justify-center p-2 w-full border border-gray-200 hover:border-cyan-300 transition-all">
                                 @php
@@ -165,7 +165,7 @@
                                     </div>
                                 </div>
                                 <x-delete-modal
-                                    :action="route('water-consumptions.destroy', $consumption)"
+                                    :action="route('consumos-agua.excluir', $consumption)"
                                     title="Deletar Registro"
                                     message="Tem certeza que deseja deletar este consumo de água?"
                                     button-text="Deletar"
